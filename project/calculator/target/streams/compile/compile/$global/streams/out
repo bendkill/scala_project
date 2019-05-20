@@ -1,0 +1,4 @@
+[0m[[0m[33mwarn[0m] [0m[0m/Users/Benjamin/projects/scala_project/project/calculator/src/main/scala/Scanner.scala:3:5: a pure expression does nothing in statement position[0m
+[0m[[0m[33mwarn[0m] [0m[0m    cs[0m
+[0m[[0m[33mwarn[0m] [0m[0m    ^[0m
+[0m[[0m[33mwarn[0m] [0m[0mone warning found[0m
