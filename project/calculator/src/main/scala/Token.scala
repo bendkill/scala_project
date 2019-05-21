@@ -26,7 +26,6 @@ object Dot extends Token {
 }
 
 case class Digits(x: String) extends Token {
-  private val digits : String = x
   def tos () = x
 }
 

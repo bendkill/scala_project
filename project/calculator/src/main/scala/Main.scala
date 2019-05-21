@@ -6,7 +6,8 @@ object Main extends App {
       // TODO: exit gracefully
       System.exit(0)
     val toks = Scanner(line)
-    println(toks)
+    val term = Parser(toks)
+    println(term)
   }
   println("Program execution end.")
 }

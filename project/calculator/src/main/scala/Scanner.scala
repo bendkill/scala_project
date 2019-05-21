@@ -7,7 +7,7 @@ object Scanner {
     case ')' :: cs => Some(RParen, cs)
     case '-' :: cs => Some(Minus, cs)
     case '+' :: cs => Some(Plus, cs)
-    case '.' :: cs => Some(Dot, cs)
+    case '.' :: cs => Some(Dot, cs) // TODO: disallow "123 . 456"
     case c :: cs =>
       if (c.isDigit) {
         val (xs, rs) = (c::cs).span(x => x.isDigit)
