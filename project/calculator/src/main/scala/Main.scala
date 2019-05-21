@@ -5,7 +5,8 @@ object Main extends App {
     if (line == "q")
       // TODO: exit gracefully
       System.exit(0)
-    Scanner(line)
+    val toks = Scanner(line)
+    println(toks)
   }
   println("Program execution end.")
 }
