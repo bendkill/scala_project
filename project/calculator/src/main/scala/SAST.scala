@@ -6,7 +6,7 @@ trait Term {
 }
 
 object Empty extends Term {
-  def tos () = "" // special term for when no terms exist
+  def tos () = "Empty" // special term for when no terms exist
 }
 
 case class Natural(n:Int) extends Term {

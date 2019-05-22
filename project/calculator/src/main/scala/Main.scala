@@ -6,8 +6,15 @@ object Main extends App {
       // TODO: exit gracefully
       System.exit(0)
     val toks = Scanner(line)
-    val term = Parser(toks)
-    println(term)
+    val sterm = Parser(toks)
+    val term = Desugarer(sterm)
+    val tau = TypeChecker(term)
+    if (tau == ty.Error) {
+      println("Empty : Error")
+    } else {
+      val value = Evaluator(term)
+      println(s"$value : $tau")
+    }
   }
   println("Program execution end.")
 }
