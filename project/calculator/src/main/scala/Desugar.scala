@@ -1,11 +1,12 @@
 object Desugarer {
   def nat (n: Int) : ast.Term = {
+    assert(n >= 0)
     if (n == 0)
       ast.Zero
     else
       ast.Succ(nat(n-1))
   }
-  def mag (n: Int) : Int = math.ceil(math.log10(n)).toInt
+  def mag (n: Int) : Int = math.pow(10, math.ceil(math.log10(n))).toInt
 
   def bool (b:Boolean) : ast.Term = if (b) ast.True else ast.False
 

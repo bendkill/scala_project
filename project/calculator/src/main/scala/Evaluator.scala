@@ -58,7 +58,7 @@ object Evaluator {
           case Integer(False, v2) =>
             this(Add(Integer(False, v1), Integer(False, Succ(v1))).withType(t.tau))
           case Integer(True, Succ(v2)) =>
-            this(Add(Integer(False, v1), Integer(False, v2)).withType(t.tau))
+            this(Add(Integer(False, v1), Integer(True, v2)).withType(t.tau))
         }
         case Integer(True, Succ(v1)) => cast(this(t2), t.tau) match {
           case Integer(True | False, Zero) => Integer(True, Succ(v1))
