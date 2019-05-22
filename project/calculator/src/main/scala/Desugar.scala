@@ -13,14 +13,14 @@ object Desugarer {
   def apply (st: sast.Term) : ast.Term = st match {
     case sast.Empty => ast.Empty
     case sast.Natural(n) => nat(n)
-    case sast.Integer(isNeg, n) =>
-      ast.Integer(bool(isNeg), nat(n))
+    case sast.Negate(t1) => ast.Negate(this(t1))
+    case sast.Positive(t1) => ast.Positive(this(t1))
     case sast.Decimal(isNeg, base, dec) =>
       ast.Add(
         ast.Rational(ast.Integer(bool(isNeg), nat(base)), ast.Succ(ast.Zero)),
         ast.Rational(ast.Integer(ast.False, nat(dec)), nat(mag(dec)))
       )
     case sast.Add(a,b) => ast.Add(this(a), this(b))
-    case sast.Subtract(a,b) => ast.Subtract(this(a), this(b))
+    case sast.Subtract(a,b) => ast.Add(this(a), ast.Negate(this(b)))
   }
 }

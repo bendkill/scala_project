@@ -6,7 +6,9 @@ object Main extends App {
       // TODO: exit gracefully
       System.exit(0)
     val toks = Scanner(line)
+    println(toks)
     val sterm = Parser(toks)
+    println(sterm)
     val term = Desugarer(sterm)
     val tau = TypeChecker(term)
     if (tau == ty.Error) {

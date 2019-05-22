@@ -15,14 +15,21 @@ object TypeChecker {
         if (this(t1) == ty.Bool && this(t2) == ty.Natural) ty.Integer else err(t)
       case Rational(t1, t2) =>
         if (this(t1) == ty.Integer && this(t2) == ty.Natural) ty.Rational else err(t)
+      case Negate(t1) => this(t1) match {
+        case ty.Natural => ty.Integer
+        case ty.Integer => ty.Integer
+        case ty.Rational => ty.Rational
+        case _ => err(t)
+      }
+      case Positive(t1) => this(t1) match {
+        case ty.Natural => ty.Integer
+        case ty.Integer => ty.Integer
+        case ty.Rational => ty.Rational
+        case _ => err(t)
+      }
       case Add(t1, t2) => (this(t1), this(t2)) match {
         case (ty.Natural, tau2) => if (tau2.isNumeric) tau2 else err(t)
         case (ty.Integer, ty.Natural | ty.Integer) => ty.Integer
-        case (ty.Rational, tau2) => if (tau2.isNumeric) ty.Rational else err(t2)
-        case _ => err(t)
-      }
-      case Subtract(t1, t2) => (this(t1), this(t2)) match {
-        case (ty.Natural | ty.Integer, ty.Natural | ty.Integer) => ty.Integer
         case (ty.Rational, tau2) => if (tau2.isNumeric) ty.Rational else err(t2)
         case _ => err(t)
       }

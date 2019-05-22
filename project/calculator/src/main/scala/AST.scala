@@ -41,10 +41,15 @@ case class Rational(t1 : Term, t2: Term) extends Term {
   def tos () = s"R($t1, $t2)"
 }
 
+case class Negate(t1: Term) extends Term {
+  def tos () = s"Neg($t1)"
+}
+
+case class Positive(t1: Term) extends Term {
+  def tos () = s"Pos($t1)"
+}
+
 case class Add(t1: Term, t2: Term) extends Term {
   def tos () = s"Add($t1, $t2)"
 }
 
-case class Subtract(t1: Term, t2: Term) extends Term {
-  def tos () = s"Subtract($t1, $t2)"
-}
