@@ -10,12 +10,14 @@ object Main extends App {
     val sterm = Parser(toks)
     println(sterm)
     val term = Desugarer(sterm)
+    println(term)
     val tau = TypeChecker(term)
     if (tau == ty.Error) {
       println("Empty : Error")
     } else {
       val value = Evaluator(term)
       println(s"$value : $tau")
+      println(Sugarer(value))
     }
   }
   println("Program execution end.")
