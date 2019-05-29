@@ -51,30 +51,29 @@ object Pipe extends Token {
   override def toString () = "|"
 }
 
-object Equals extends Token {
+object EqualSign extends Token {
   override def toString () = "="
 }
 
-object BangEquals extends Token {
+object BangEqualSign extends Token {
   override def toString () = "!="
 }
-
 
 object LTriangle extends Token {
   override def toString () = "<"
 }
 
-object LTriangle extends Token {
+object RTriangle extends Token {
   override def toString () = ">"
 }
 
-// object Semi extends Token {
-//   override def toString () = ";"
-// }
+object LTriangleEqualSign extends Token {
+  override def toString () = "<="
+}
 
-// object Comma extends Token {
-//   override def toString () = ","
-// }
+object RTriangleEqualSign extends Token {
+  override def toString () = ">="
+}
 
 object EvenFunc extends Token {
   override def toString () = "even"
@@ -140,8 +139,16 @@ object LCMFunc extends Token {
   override def toString () = "lcm"
 }
 
+object ModFunc extends Token {
+  override def toString () = "mod"
+}
+
 object NotFunc extends Token {
   override def toString () = "not"
+}
+
+object XorFunc extends Token {
+  override def toString () = "xor"
 }
 
 object FDivFunc extends Token {

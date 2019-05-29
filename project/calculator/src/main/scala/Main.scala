@@ -6,15 +6,10 @@ object Main extends App {
       // TODO: exit gracefully
       System.exit(0)
     val toks = Scanner(line)
-    println(toks)
     val sterm = Parser(toks)
-    println(sterm)
     val term = Desugarer(sterm)
-    println(term)
     val tau = TypeChecker(term)
-    if (tau == ty.Error) {
-      println("Empty : Error")
-    } else {
+    if (tau != ty.Error) {
       val value = Evaluator(term)
       println(s"$value : $tau")
       println(Sugarer(value))

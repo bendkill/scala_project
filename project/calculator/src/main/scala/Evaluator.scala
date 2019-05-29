@@ -12,6 +12,10 @@ object Evaluator {
   def typeErr (s: String) : Term = err("unchecked type: " ++ s)
 
   def cast (t: Term, tau:ty.Ty) : Term = tau match {
+    case ty.Bool => t match {
+      case True | False => t
+      case _ => castErr(tau)
+    }
     case ty.Natural => t match {
       case Zero | Succ(_) => t
       case Integer(False | True, Zero) => Zero
@@ -206,10 +210,28 @@ object Evaluator {
     }
     case (Rational(n1, d1), Rational(Integer(s2, n2), d2)) =>
       mult(Rational(n1, d1), Rational(Integer(s2, d2), n2))
-    case (_, _) =>
-      throw new RuntimeException(s"div: $v1, $v2")
-      typeErr(s"div: $v1, $v2")
+    case (_, _) => typeErr(s"div: $v1, $v2")
   }
+
+  def fulldiv(v1: Term, v2: Term) : (Term, Term) = (v1, v2) match {
+    case (Zero | Succ(_), Zero | Succ(_)) => divNat(v1, v2)
+    case (Integer(s1, n1), Integer(s2, n2)) =>
+      val (q, r) = divNat(n1, n2)
+      if (q == Empty || r == Empty) (Empty, Empty)
+      else (Integer(xor(s1, s2), q), Integer(s2, r))
+    case (Rational(n1, d1), Rational(Integer(s2, n2), d2)) =>
+      reduce(mult(Rational(n1, d1), Rational(Integer(s2, d2), n2))) match {
+        case Rational(Integer(s, n), d) =>
+          val (q, r) = fulldiv(Integer(s,n), Integer(False, d))
+          (cast(q, ty.Rational), cast(r, ty.Rational))
+        case _ => (typeErr(s"multiplication of rationals"), Empty)
+      }
+    case (_, _) => (typeErr(s"div: $v1, $v2"), Empty)
+  }
+
+  def fdiv(v1: Term, v2: Term) : Term = { val (q,_) = fulldiv(v1, v2); q }
+
+  def mod(v1: Term, v2: Term) : Term = { val (_,r) = fulldiv(v1, v2); r }
 
   // should always return a natural
   def gcd(v1: Term, v2: Term) : Term = if (v1 == Zero) v2
@@ -238,7 +260,6 @@ object Evaluator {
     case Zero | Succ(_) => t
     case Integer(_, _) => t
     case Rational(Integer(s, n), d) =>
-      println(s"reduce: $n, $d")
       val g = gcd(n,d)
       Rational(Integer(s, cast(div(n,g), ty.Natural)), cast(div(d,g), ty.Natural))
   }
@@ -259,7 +280,7 @@ object Evaluator {
     case (Rational(Integer(_, Zero), _), v2) => v2
     case (v1, Rational(Integer(_, Zero), _)) => v1
     case (Rational(n1, d1), Rational(n2, d2)) =>
-      println(s"add: ($d1, $d2) + ($d1, $d2)")
+      // println(s"add: ($d1, $d2) + ($d1, $d2)")
       val d = lcm(d1, d2) // should be a natural
       val n = add(
         mult(n1, cast(div(d, d1), ty.Integer)),
@@ -274,14 +295,31 @@ object Evaluator {
     case False => False
     case Zero => Zero
     case Succ(t1) => Succ(this(t1))
-    case Pred(Zero) => Zero
-    case Pred(Succ(t1)) => this(t1)
     case Integer(t1, t2) => Integer(this(t1), this(t2))
     case Rational(t1, t2) => reduce(Rational(this(t1), this(t2)))
     case Negate(t1) => negate(this(t1))
     case Positive(t1) => positive(this(t1))
-    case Add(t1, t2) => add(cast(this(t1), t.tau), cast(this(t2), t.tau))
-    case Multiply(t1, t2) => mult(cast(this(t1), t.tau), cast(this(t2), t.tau))
-    case Divide(t1, t2) => div(cast(this(t1), t.tau), cast(this(t2), t.tau))
+    case Greater(t1, t2) => greater(cast(this(t1), t.tau), cast(this(t2), t.tau))
+    case Even(t1) => even(this(t1))
+    case Less(t1, t2) => less(cast(this(t1), t.tau), cast(this(t2), t.tau))
+    case Multiply(t1, t2) =>
+      reduce(mult(cast(this(t1), t.tau), cast(this(t2), t.tau)))
+    case FloorDivide(t1, t2) =>
+      reduce(fdiv(cast(this(t1), t.tau), cast(this(t2), t.tau)))
+    case Odd(t1) => odd(this(t1))
+    case Neq(t1, t2) => neq(cast(this(t1), t.tau), cast(this(t2), t.tau))
+    case And(t1, t2) => and(this(t1), this(t2))
+    case Geq(t1, t2) => geq(cast(this(t1), t.tau), cast(this(t2), t.tau))
+    case Add(t1, t2) =>
+      reduce(add(cast(this(t1), t.tau), cast(this(t2), t.tau)))
+    case Divide(t1, t2) =>
+      reduce(div(cast(this(t1), t.tau), cast(this(t2), t.tau)))
+    case GCD(t1, t2) => gcd(this(t1), this(t2))
+    case LCM(t1, t2) => lcm(this(t1), this(t2))
+    case Mod(t1, t2) =>
+      reduce(mod(cast(this(t1), t.tau), cast(this(t2), t.tau)))
+    case Xor(t1, t2) => xor(this(t1), this(t2))
+    case Eq(t1, t2) => equal(cast(this(t1), t.tau), cast(this(t2), t.tau))
+    case Or(t1, t2) => or(this(t1), this(t2))
   }
 }
