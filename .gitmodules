@@ -1,0 +1,3 @@
+[submodule "project/peano"]
+	path = project/peano
+	url = git@github.com:bendkill/peano.git

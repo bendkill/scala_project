@@ -1,1 +1,4 @@
 project/calculator/target
+**.aux
+**.log
+**/auto/
