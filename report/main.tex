@@ -40,6 +40,8 @@ We now describe on a high-level how Scala achieves its goals of providing
 good support for component software and encouraging mass adoption.
 
 \subsection{High-Level Design}
+\label{sec:high-level-design}
+
 In order to encourage adoption by software developers, Scala's syntax is very similar to Java's and C\#'s. In fact, Scala is able to work and interact with components coded in Java and C\#. However, remember that Java and C\# are suboptimal languages for supporting component software. Thus, in order to improve component support over Java and C\#, Scala discards or modifies some their existing conventions. For example, Figure 1 demonstrates a simple program (CITE THIS) that prints out options provided in the command line.
 \begin{figure}[h]
   \centering
@@ -62,30 +64,43 @@ objects themselves to be decomposed. This language also implements powerful and
 novel abstraction concepts for types and values. For example, unlike Java
 abstract classes, traits can include method implementations or fields.
 
-\section{Interesting Technical Details}
-
-\subsection{Scala and Java}
-
-\subsection{Object Model}
-
-\subsection{Objects and Operations}
-
-\subsection{Abstraction}
-
-\subsection{Composition}
-
-\subsection{Decomposition}
-
+% 3. related work
 \section{Related Work}
+\label{sec:related-work}
 
-\subsection{$\nu$Obj Calculus}
-We did not know what νObj calculus was and thus looked at another paper to
-understand it.
 
-\section{Code Implementation}
-We developed several Scala example programs. Most notably, we utilized many of
-the interesting Scala features described in section II to implement a
-calculator.
+% 2. Technical summary: Killeen
+\section{Interesting Technical Details}
+\label{sec:interesting-tech}
+
+% singleton objects
+
+% unified object model
+
+% pattern matching in an object oriented setting
+
+% Abstraction:
+% - subtypes and polymorphism
+% -
+
+% Traits and classes:
+% A trait do encapsulate state. They just define methods or variables that you
+% have to have but don't provide instantiated values for those.
+
+% Classes require implementations or values for everything.
+
+% Views in Scala implement something close to SML's signatures or Haskell's
+% typeclasses.
+
+% Multiple inheritance with mixins.
+
+% 4. report on peano arithmetic calculator.
+\section{Engagement: Peano Arithmetic Calculator}
+\label{sec:engag-peano-arithm}
+
+% 5. should encapsulate discussion of current status
+\section{Discussion}
+\label{sec:discussion}
 
 \section{Current Status of Work}
 After 15 years, Scala has been regularly updated and is currently at stable
