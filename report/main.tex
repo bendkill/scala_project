@@ -97,7 +97,32 @@ abstract classes, traits can include method implementations or fields.
 \section{Interesting Technical Details}
 \label{sec:interesting-tech}
 
-\subsection{}
+\subsection{Singleton Objects}
+Scala is very unique in that it implements Singleton Objects. Singleton Objects are classes that can only have one instance while a Scala program is running. Such classes are defined almost exactly the same as normal Scala classes. The only difference is that the \texttt{class} modifier is replaced by the \texttt{object} modifier. Some examples of singleton objects include: a class representation of Zero and the PrintOptions example from above. Note that Singleton Objects are used extensively when Scala uses a Java class. Every static member of a Java class is stored in a Singleton Object.
+
+\subsection{Pattern Matching in an Object-Oriented Setting}
+Unlike Java and other object-oriented programming languages, Scala implements pattern matching. That is, Scala provides the programmer with a natural and functional-like mechanism for ``creating structured data representations similar to algebraic data types and a decomposition mechanism based on pattern matching.'' \\\\
+Since Scala is an object-oriented programming language, it does not have algebraic data types. Instead, Scala creates structured data representations through the \texttt{\textbf{case}} modifier. If $\textbf{case}$ precedes the definition of a class, a factory method with the same arguments as the primary class constructor is automatically defined. For example, in Figure 4, since the \texttt{\textbf{Num}} and \texttt{\textbf{Plus}} classes are defined with the \texttt{\textbf{case}} modifier, we can define an “anonymous” \textbf{Num} object without using the \textbf{new} keyword. As the reader can see, factory methods are very similar in structure to the constructors of algebraic data types. In fact, factory methods serve the same purpose as constructors when pattern matching.\\\\
+Scala's pattern matching expressions can decompose the factory method constructors as patterns. The syntax for pattern matching expressions is 
+\[
+    \texttt{x \textbf{case} \{ \textbf{case} $p_1 => e_1$ \textbf{case} $p_1 => e_1$ ... \}}
+\]
+This syntax matches the object \texttt{x} against the patterns $p_1, p_2, ...$ in order. Each $p_1$ is of the form $FactoryMethod(x_1, x_2, …, x_n)$, where $FactoryMethod$ refers to the factory method constructors discussed previously. When a match $p_i$ is found, then $e_i$ is executed. For example, in Figure 5, the \texttt{eval} function matches \texttt{term} against \texttt{Num(x)} and \texttt{Plus(left, right)} (the constructors are from Figure 4).
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=\columnwidth]{fig4.png}
+    \caption{The syntax of the $\nu$Obj calculus}
+    \label{fig:example}
+  \end{figure}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=\columnwidth]{fig5.png}
+    \caption{The typing rules of the $\nu$Obj calculus}
+    \label{fig:example}
+  \end{figure}
+Note: unlike Java, writing a simple language interpreter in Scala is almost as easy as writing an interpreter in SML. Examples of pattern matching being used for an interpreter can be seen in the calculator program we wrote.
 % singleton objects
 
 % unified object model
@@ -127,7 +152,7 @@ abstract classes, traits can include method implementations or fields.
 \section{Discussion}
 \label{sec:discussion}
 
-\section{Current Status of Work}
+\subsection{Current Status of Work}
 After 15 years, Scala has been regularly updated and is currently at stable
 release version 2.12.8. Over this period, the core principles of Scala have
 remained the same. Scala has achieved widespread adoption in the industry with
