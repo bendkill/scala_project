@@ -128,6 +128,17 @@ interest.
 \subsection{Singleton Objects}
 Scala is very unique in that it implements Singleton Objects. Singleton Objects are classes that can only have one instance while a Scala program is running. Such classes are defined almost exactly the same as normal Scala classes. The only difference is that the \texttt{class} modifier is replaced by the \texttt{object} modifier. Some examples of singleton objects include: a class representation of Zero and the PrintOptions example from above. Note that Singleton Objects are used extensively when Scala uses a Java class. Every static member of a Java class is stored in a Singleton Object.
 
+\subsection{Unified Object Model}
+In Scala, every value is an object and every class is a subtype of the \texttt{Any} class. Below the \texttt{Any} class, Scala classes can generally be divided into two groups: value classes that inherit from the \texttt{AnyVal} class and reference classes that inherit from the \texttt{AnyRef} class. Note that the value classes that are not \texttt{AnyVal} do not subtype each other. This means, for example, that the \texttt{Int} class is not a subtype of the \texttt{Float} class. Scala prevents such subtyping because the language forces an invariant that when a value is interpreted in a subclass and a super class, the values's representation does not change. For example, both \texttt{Int} and \texttt{Float} maintain a \texttt{MaxValue} member. However, the \texttt{MaxValue} of \texttt{Float} is different from the \texttt{MaxValue} of \texttt{Int}. Instead, Scala implements \textbf{views} (discussed below) which allow from implicit conversions from one type to another. As expected of an object-oriented language, class \texttt{Null} is a subtype of every reference type. However, since Scala is part functional, the language also has a \texttt{Nothing} type, which represents an empty type, is a subtype of every single type. For example, \texttt{Nil} is defined as \texttt{List[Nothing]}. Note that \texttt{Nothing} allows for the implementation of options, another functional concept, in Scala. \\\\
+Another major aspect of Scala's object model is that every operation is the invocation of a method. For example, \texttt{x + y} is syntactic sugar for \text{x.+(y)}; \texttt{x} is the receiver object, \texttt{+} is a method defined in \texttt{x}, and \texttt{y} is the method's argument. In fact, Scala desugars every identifier between two expressions as a method call of the first expression. Unlike constructors in Java, Scala constructors just come from the class name. There is no need for a separate class constructor inside the class definition. When a class is instantiated with its constructor, the whole body of the class is executed. 
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{scala_classes}
+    \caption{A visual representation of Scala's class hierarchy}
+    \label{fig:example}
+  \end{figure} 
+
 \subsection{Pattern Matching in an Object-Oriented Setting}
 Unlike Java and other object-oriented programming languages, Scala implements pattern matching. That is, Scala provides the programmer with a natural and functional-like mechanism for ``creating structured data representations similar to algebraic data types and a decomposition mechanism based on pattern matching.'' \\\\
 Since Scala is an object-oriented programming language, it does not have algebraic data types. Instead, Scala creates structured data representations through the \texttt{\textbf{case}} modifier. If $\textbf{case}$ precedes the definition of a class, a factory method with the same arguments as the primary class constructor is automatically defined. For example, in Figure 4, since the \texttt{\textbf{Num}} and \texttt{\textbf{Plus}} classes are defined with the \texttt{\textbf{case}} modifier, we can define an “anonymous” \textbf{Num} object without using the \textbf{new} keyword. As the reader can see, factory methods are very similar in structure to the constructors of algebraic data types. In fact, factory methods serve the same purpose as constructors when pattern matching.\\\\
@@ -151,26 +162,26 @@ This syntax matches the object \texttt{x} against the patterns $p_1, p_2, ...$ i
     \label{fig:example}
   \end{figure}
 Note: unlike Java, writing a simple language interpreter in Scala is almost as easy as writing an interpreter in SML. Examples of pattern matching being used for an interpreter can be seen in the calculator program we wrote.
-% singleton objects
 
-% unified object model
+\subsection{Views}
 
-% pattern matching in an object oriented setting
+% singleton objects - done
+
+% unified object model -done
+
+% pattern matching in an object oriented setting -done
 
 % Abstraction:
 % - subtypes and polymorphism
-% -
+% - Traits and classes.
+%   - A trait do encapsulate state. They just define methods or variables that you
+%     have to have but don't provide instantiated values for those.
+%   -Classes require implementations or values for everything.
 
-% Traits and classes:
-% A trait do encapsulate state. They just define methods or variables that you
-% have to have but don't provide instantiated values for those.
-
-% Classes require implementations or values for everything.
+% Multiple inheritance with mixins. (Small paragraph right after abstractions)
 
 % Views in Scala implement something close to SML's signatures or Haskell's
 % typeclasses.
-
-% Multiple inheritance with mixins.
 
 % 4. report on peano arithmetic calculator.
 \section{Engagement: Peano Arithmetic Calculator}
