@@ -66,13 +66,38 @@ abstract classes, traits can include method implementations or fields.
 
 % 3. related work
 \section{Related Work}
-\label{sec:related-work}
+  \label{sec:related-work}
+  We did not know what $\nu$Obj calculus was and therefore read the paper “A Nominal Theory of Objects with Dependent Types” by Martin Odersky, Vincent Cremet, Christine Rockl, and Matthias Zenger to better understand the concept. Because our main focus is specifically on understanding Scala and not on learning the $\nu$Obj calculus (which itself is a topic worthy of its own summary paper), we only provide a general description of $\nu$Obj calculus below.\\\\
+  According to Odersky et al., $\nu$Obj calculus, broadly, is “a calculus and dependent type system for classes and objects can have types as members.” Note that a dependent type is a type that is defined by some value. The calculus’s type system is well typed and can implement crucial aspects of Java’s inner class system, virtual types, and family polymorphism. Moreover, this type system can also model SML-style modules and functors. $\nu$Obj calculus diverges from standard type systems for objects in three significant ways:
+  \begin{itemize}
+    \item Instead of only objects being primitive, classes are also  primitive. We can view classes as “first class” as they can be the result of a term evaluation and be associated with labels.
+    \item Object records are not passed around during evaluation and type checking. Rather, every object has a name reference that is passed around.
+    \item Object types can be expressed using (possibly nominal) type components.
+  \end{itemize}
+  
+  We leave Figures 2 (syntax) and 3 (type assignment) below for the reader's interest.
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=\columnwidth]{syntax.png}
+    \caption{The syntax of the $\nu$Obj calculus}
+    \label{fig:example}
+  \end{figure}
+
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=\columnwidth]{typecheck.png}
+    \caption{The typing rules of the $\nu$Obj calculus}
+    \label{fig:example}
+  \end{figure}
+
+
 
 
 % 2. Technical summary: Killeen
 \section{Interesting Technical Details}
 \label{sec:interesting-tech}
 
+\subsection{}
 % singleton objects
 
 % unified object model
