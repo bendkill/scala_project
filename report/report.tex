@@ -164,24 +164,36 @@ This syntax matches the object \texttt{x} against the patterns $p_1, p_2, ...$ i
 Note: unlike Java, writing a simple language interpreter in Scala is almost as easy as writing an interpreter in SML. Examples of pattern matching being used for an interpreter can be seen in the calculator program we wrote.
 
 \subsection{Views}
+Views are used to implictly convert one type to another. A view is implemented with a method that takes in an arguemnt of one type and returns an object of another type. The only difference between a view method and a normal method is that view methods require the \texttt{implicit} modifier, which goes before the method definition. This modifier allows the Scala compiler to know that it is the implcit conversion method when converting from one type to another. Scala implictly applies a view to an expression, $e$ of type $T$, when one of the following cases occur:
+\begin{itemize}
+    \item The expected type of $e$ is not of type $T$.
+    \item A member selected from $e$ is not a member of $T$.
+\end{itemize}  
+For example, in Figure 7, \texttt{listToSet} is the view that converts \texttt{GenList[T]} to \texttt{Set[T]}. The compiler inserts applications of the view onto \texttt{xs}.
+\begin{figure}
+  
+  \inputminted{Scala}{examples/Set.scala}
+  \caption{An example of views and implcit conversions.}
+  \label{lst:nats-example}
+\end{figure}
+% TODO
+% singleton objects - DONE
 
-% singleton objects - done
+% unified object model -DONE
 
-% unified object model -done
+% pattern matching in an object oriented setting -DONE
 
-% pattern matching in an object oriented setting -done
-
-% Abstraction:
+% Abstraction: -NOT DONE
 % - subtypes and polymorphism
 % - Traits and classes.
 %   - A trait do encapsulate state. They just define methods or variables that you
 %     have to have but don't provide instantiated values for those.
 %   -Classes require implementations or values for everything.
 
-% Multiple inheritance with mixins. (Small paragraph right after abstractions)
+% Multiple inheritance with mixins. (Small paragraph right after abstractions) -NOT DONE
 
 % Views in Scala implement something close to SML's signatures or Haskell's
-% typeclasses.
+% typeclasses. -DONE
 
 % 4. report on peano arithmetic calculator.
 \section{Engagement: Peano Arithmetic Calculator}
