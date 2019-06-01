@@ -2,3 +2,4 @@ project/calculator/target
 **.aux
 **.log
 **/auto/
+**/_minted-report/
