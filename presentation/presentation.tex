@@ -10,6 +10,9 @@
 \usepackage{graphbox}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{minted}
+\setminted{} % numbers=right, bgcolor=lightgray}
+
 
 \title{The Scala Programming Language}
 \author{Troy Hut and Benjamin Killeen}
@@ -40,6 +43,16 @@
     \caption{The Scala class hierarchy.}
     \label{fig:class_hierarchy}
   \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Naturals}
+  \begin{listing}
+    \inputminted{Scala}{../examples/nats.scala}
+    \caption{An implementation of naturals.}
+    \label{lst:nats-example}
+  \end{listing}
+  
 \end{frame}
 
 \end{document}
