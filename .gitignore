@@ -3,4 +3,8 @@ project/calculator/target
 **.log
 **/auto/
 **/_minted-*/
-examples/nats
+**.nav
+**.out
+**.toc
+examples/nat
+examples/olist

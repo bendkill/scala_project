@@ -31,7 +31,7 @@
   \begin{itemize}
   \item<2-> Object oriented
   \item<3-> Functional
-  \item<4-> Statically typed
+  \item<4-> Frustratingly well-typed
   \end{itemize}
 \end{frame}
 
@@ -45,14 +45,37 @@
   \end{figure}
 \end{frame}
 
+\section{Object Oriented}
+
+\subsection{Natural Numbers}
 \begin{frame}
-  \frametitle{Naturals}
-  \begin{listing}
-    \inputminted{Scala}{../examples/nats.scala}
-    \caption{An implementation of naturals.}
-    \label{lst:nats-example}
-  \end{listing}
-  
+  \frametitle{Traits, Objects, and Classes}
+  \inputminted{Scala}{../examples/ExampleNat.scala}
+  \pause{}
+  \inputminted{Scala}{../examples/ExampleZero.scala}
+  \pause{}
+  \inputminted{Scala}{../examples/ExampleSucc.scala}  
+\end{frame}
+
+\section{Functional}
+\begin{frame}
+  \frametitle{The \mintinline{Scala}|nat| Package}
+  \inputminted[firstline=1, lastline=30, fontsize=\tiny]
+  {Scala}{../examples/Nat.scala}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Variance}
+  % todo: describe variance a bit, use the example
+\end{frame}
+
+\subsection{Ordered List}
+\begin{frame}
+  \frametitle{Ordered List}
+  \inputminted[firstline=1, fontsize=\tiny]
+  {Scala}{../examples/OrderedList.scala}
 \end{frame}
 
 \end{document}

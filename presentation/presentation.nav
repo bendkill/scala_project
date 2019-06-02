@@ -8,10 +8,16 @@
 \headcommand {\beamer@framepages {2}{5}}
 \headcommand {\slideentry {1}{0}{2}{6/6}{}{0}}
 \headcommand {\beamer@framepages {6}{6}}
-\headcommand {\slideentry {1}{0}{3}{7/7}{}{0}}
-\headcommand {\beamer@framepages {7}{7}}
-\headcommand {\beamer@partpages {1}{7}}
-\headcommand {\beamer@subsectionpages {2}{7}}
-\headcommand {\beamer@sectionpages {2}{7}}
-\headcommand {\beamer@documentpages {7}}
-\headcommand {\def \inserttotalframenumber {4}}
+\headcommand {\sectionentry {2}{Illustrative Examples}{7}{Illustrative Examples}{0}}
+\headcommand {\beamer@sectionpages {2}{6}}
+\headcommand {\beamer@subsectionpages {2}{6}}
+\headcommand {\beamer@subsectionentry {0}{2}{1}{7}{Natural Numbers}}\headcommand {\beamer@subsectionpages {7}{6}}
+\headcommand {\slideentry {2}{1}{1}{7/9}{Natural Numbers}{0}}
+\headcommand {\beamer@framepages {7}{9}}
+\headcommand {\slideentry {2}{1}{2}{10/10}{Natural Numbers}{0}}
+\headcommand {\beamer@framepages {10}{10}}
+\headcommand {\beamer@partpages {1}{10}}
+\headcommand {\beamer@subsectionpages {11}{10}}
+\headcommand {\beamer@sectionpages {7}{10}}
+\headcommand {\beamer@documentpages {10}}
+\headcommand {\def \inserttotalframenumber {5}}
