@@ -7,4 +7,6 @@ project/calculator/target
 **.out
 **.toc
 examples/nat
-examples/olist
+examples/ordlist
+examples/ord
+examples/target

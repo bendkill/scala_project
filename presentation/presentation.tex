@@ -45,9 +45,6 @@
   \end{figure}
 \end{frame}
 
-\section{Object Oriented}
-
-\subsection{Natural Numbers}
 \begin{frame}
   \frametitle{Traits, Objects, and Classes}
   \inputminted{Scala}{../examples/ExampleNat.scala}
@@ -57,25 +54,50 @@
   \inputminted{Scala}{../examples/ExampleSucc.scala}  
 \end{frame}
 
-\section{Functional}
 \begin{frame}
-  \frametitle{The \mintinline{Scala}|nat| Package}
-  \inputminted[firstline=1, lastline=30, fontsize=\tiny]
+  \frametitle{Inferred Methods}
+  \inputminted[firstline=1, lastline=1, fontsize=\tiny]
   {Scala}{../examples/Nat.scala}
+  \inputminted[firstline=5, lastline=12, fontsize=\tiny]
+  {Scala}{../examples/Nat.scala}
+  \inputminted[firstline=19, lastline=19, fontsize=\tiny]
+  {Scala}{../examples/Nat.scala}
+  \pause{}
+  \includegraphics[width=0.7\linewidth]{nat_usage}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Type Parameters}
+  \inputminted[fontsize=\small]{Scala}{../examples/Ord.scala}
+\end{frame}
 
+\begin{frame}
+  \frametitle{The \mintinline{Scala}|nat| Package}
+  \inputminted[firstline=1, lastline=28, fontsize=\tiny]
+  {Scala}{../examples/Nat.scala}
+  \vspace{-0.25\linewidth}
+  \pause{}
+  \flushright{\includegraphics[width=0.4\linewidth]{nat_ordering_usage}}
+\end{frame}
 
 \begin{frame}
   \frametitle{Variance}
-  % todo: describe variance a bit, use the example
+  \begin{block}{Covariance}
+    If \mintinline{Scala}|C| is a \emph{covariant} type constructor and
+    \mintinline{Scala}|S <: T|, then \mintinline{Scala}|C[S] <: C[T]|.
+  \end{block}
+  \pause{}
+  \begin{block}{Contravariance}
+    If \mintinline{Scala}|C| is a \emph{contravariant} type constructor and
+    \mintinline{Scala}|S <: T|, then \mintinline{Scala}|C[S] >: C[T]|.
+  \end{block}
 \end{frame}
 
 \subsection{Ordered List}
 \begin{frame}
   \frametitle{Ordered List}
   \inputminted[firstline=1, fontsize=\tiny]
-  {Scala}{../examples/OrderedList.scala}
+  {Scala}{../examples/OrdList.scala}
 \end{frame}
 
 \end{document}
