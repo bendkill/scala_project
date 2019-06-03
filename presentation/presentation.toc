@@ -1,3 +1,8 @@
 \beamer@endinputifotherversion {3.36pt}
 \beamer@sectionintoc {1}{Introduction}{2}{0}{1}
-\beamer@subsectionintoc {1}{1}{Ordered List}{17}{0}{1}
+\beamer@sectionintoc {2}{Class Hierarchy}{6}{0}{2}
+\beamer@subsectionintoc {2}{1}{Nat}{7}{0}{2}
+\beamer@sectionintoc {3}{Typing}{12}{0}{3}
+\beamer@subsectionintoc {3}{1}{NatOrdering}{14}{0}{3}
+\beamer@sectionintoc {4}{Variance}{16}{0}{4}
+\beamer@subsectionintoc {4}{1}{OrdList}{19}{0}{4}

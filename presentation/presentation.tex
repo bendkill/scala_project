@@ -35,16 +35,14 @@
   \end{itemize}
 \end{frame}
 
+\section{Class Hierarchy}
 \begin{frame}
-  \frametitle{Scala is \textbf{Scalable}}
-  \begin{figure}
-    \centering
-    \includegraphics[width=0.8\linewidth]{scala_classes}
-    \caption{The Scala class hierarchy.}
-    \label{fig:class_hierarchy}
-  \end{figure}
+  \frametitle{The Scala Class Hierarchy}
+  \centering
+  \includegraphics[width=0.9\linewidth]{scala_classes}
 \end{frame}
 
+\subsection{Nat}
 \begin{frame}
   \frametitle{Traits, Objects, and Classes}
   \inputminted{Scala}{../examples/ExampleNat.scala}
@@ -66,22 +64,45 @@
   \includegraphics[width=0.7\linewidth]{nat_usage}
 \end{frame}
 
+\section{Typing}
+
 \begin{frame}
   \frametitle{Type Parameters}
+  \begin{block}{Problem:}
+    What if a trait or class can contain arbitrary types?
+  \end{block}
+  \vspace{1em}
+  \pause{}
   \inputminted[fontsize=\small]{Scala}{../examples/Ord.scala}
 \end{frame}
 
+\subsection{NatOrdering}
 \begin{frame}
-  \frametitle{The \mintinline{Scala}|nat| Package}
-  \inputminted[firstline=1, lastline=28, fontsize=\tiny]
+  \frametitle{\mintinline{Scala}|NatOrdering|}
+  \begin{block}{An Ordering on Naturals}
+    \mintinline{Scala}|NatOrdering| only has to implement
+    \mintinline{Scala}|leq| with the proper type, and it gets
+    \mintinline{Scala}|geq|, \mintinline{Scala}|lt|, \emph{etc.} for free.
+  \end{block}
+
+  \inputminted[firstline=21, lastline=28]
   {Scala}{../examples/Nat.scala}
-  \vspace{-0.25\linewidth}
-  \pause{}
-  \flushright{\includegraphics[width=0.4\linewidth]{nat_ordering_usage}}
 \end{frame}
 
 \begin{frame}
+  \frametitle{\mintinline{Scala}|Nat| in Full}
+  \inputminted[firstline=5, lastline=28, fontsize=\tiny]
+  {Scala}{../examples/Nat.scala}
+  \vspace{-0.25\linewidth}
+  \flushright{\includegraphics[width=0.4\linewidth]{nat_ordering_usage}}
+\end{frame}
+
+\section{Variance}
+\begin{frame}
   \frametitle{Variance}
+  Type parameters immediately raise the question of subtypes.
+
+  \pause{}
   \begin{block}{Covariance}
     If \mintinline{Scala}|C| is a \emph{covariant} type constructor and
     \mintinline{Scala}|S <: T|, then \mintinline{Scala}|C[S] <: C[T]|.
@@ -93,13 +114,30 @@
   \end{block}
 \end{frame}
 
-\subsection{Ordered List}
+\subsection{OrdList}
 \begin{frame}
   \frametitle{Ordered List}
-  \inputminted[firstline=1, fontsize=\tiny]
+  \inputminted[firstline=1, lastline=8, fontsize=\scriptsize]
+  {Scala}{../examples/OrdList.scala}
+  \pause{}
+  \inputminted[firstline=9, lastline=15, fontsize=\scriptsize]
+  {Scala}{../examples/OrdList.scala}
+  \pause{}
+  \inputminted[firstline=16, fontsize=\scriptsize]
   {Scala}{../examples/OrdList.scala}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Ordered List}
+  \includegraphics[width=\linewidth]{ordlist_usage}
+  \vspace{1em}
+  \pause{}
+  \begin{block}{Note:}
+    Even though \mintinline{Scala}|zero: Zero| and \mintinline{Scala}|one: Succ|
+    have different types, an \mintinline{Scala}|OrdList| can contain both
+    because they have a common \textbf{supertype}.
+  \end{block}
+\end{frame}
 \end{document}
 %%% Local Variables:
 %%% mode: latex
