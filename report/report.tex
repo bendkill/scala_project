@@ -6,6 +6,7 @@
 \usepackage{mathtools}
 \usepackage{relsize}
 \usepackage[font=footnotesize]{subfig}
+\usepackage{hyperref}
 \usepackage{minted}
 \setminted{fontsize=\scriptsize, frame=single, breaklines=true}
 
@@ -19,6 +20,7 @@
 
 \begin{document}
 \maketitle    
+
 \begin{abstract}
 Insert abstract here.
 \end{abstract}                     
@@ -44,13 +46,13 @@ adoption.
 In pursuit of usability, Scala borrows many syntactic elements from Java and
 C\#, and it integrates smoothly with components from these languages. In fact,
 the Scala library includes standard Java objects like \texttt{java.lang.String},
-as shown in \ref{lst:print}. Scala code can take advantage of existing
+as shown in Lst.~\ref{lst:print}. Scala code can take advantage of existing
 implementations in Java, and in the end it compiles to Java bytecode, making
 Scala packages available to Java programmers. At the same time, Scala maintains
 a distinct programming paradigm from either Java or C\#. It discards some
 features from these languages, and it develops completely novel ideas from the
 $\nu$Obj calculus \cite{odersky_nominal_2003}. The example in
-Fig.~\ref{lst:print} highlights syntactic similarities between Java and Scala,
+Lst.~\ref{lst:print} highlights syntactic similarities between Java and Scala,
 comparing two implementations of the same program. Note how Java prepends type
 declarations before terms, whereas Scala affixes type declarations using the
 \texttt{:} operator. This and other changes effect a terser, more expressive
@@ -143,9 +145,6 @@ process through which software construction takes place in Scala.
 \subsection{Unified Object Model}
 \label{sec:unified-object-model}
 
-
-
-
 In Scala, every value is an object and every class is a subtype of the
 \texttt{Any} class. Below the \texttt{Any} class, Scala classes can generally be
 divided into two groups: value classes that inherit from the \texttt{AnyVal}
@@ -200,7 +199,6 @@ pattern matching. That is, Scala provides the programmer with a natural and
 functional-like mechanism for ``creating structured data representations similar
 to algebraic data types and a decomposition mechanism based on pattern
 matching.''
-
 
 Since Scala is an object-oriented programming language, it does not have
 algebraic data types. Instead, Scala creates structured data representations
@@ -317,7 +315,7 @@ maintained by the community. The main community page can be found at:
 https://www.scala-lang.org/community/. A detailed, updated, and easy to read
 documentation can be found at: https://docs.scala-lang.org/. Finally, there are
 dedicated installers/installation guides for all operating systems at:
-https://www.scala-lang.org/download/.
+\href{https://www.scala-lang.org/download/}{scala-lang.org/download}.
 
 
 \bibliographystyle{IEEEtran}
