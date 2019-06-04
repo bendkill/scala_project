@@ -8,7 +8,7 @@
 \usepackage[font=footnotesize]{subfig}
 \usepackage{hyperref}
 \usepackage{minted}
-\setminted{fontsize=\scriptsize, frame=single, breaklines=true}
+\setminted{fontsize=\scriptsize, breaklines=true}
 
 \usepackage{graphicx}
 \graphicspath{ {../images/} }
@@ -46,13 +46,13 @@ adoption.
 In pursuit of usability, Scala borrows many syntactic elements from Java and
 C\#, and it integrates smoothly with components from these languages. In fact,
 the Scala library includes standard Java objects like \texttt{java.lang.String},
-as shown in Lst.~\ref{lst:print}. Scala code can take advantage of existing
+as shown in Listing~\ref{lst:print}. Scala code can take advantage of existing
 implementations in Java, and in the end it compiles to Java bytecode, making
 Scala packages available to Java programmers. At the same time, Scala maintains
 a distinct programming paradigm from either Java or C\#. It discards some
 features from these languages, and it develops completely novel ideas from the
 $\nu$Obj calculus \cite{odersky_nominal_2003}. The example in
-Lst.~\ref{lst:print} highlights syntactic similarities between Java and Scala,
+Listing~\ref{lst:print} highlights syntactic similarities between Java and Scala,
 comparing two implementations of the same program. Note how Java prepends type
 declarations before terms, whereas Scala affixes type declarations using the
 \texttt{:} operator. This and other changes effect a terser, more expressive
@@ -60,8 +60,8 @@ syntax overall.
 
 \begin{listing}
   \centering
-  \inputminted{Java}{../examples/PrintExample.java}
-  \inputminted{Scala}{../examples/PrintExample.scala}
+  \inputminted[frame=single]{Java}{../examples/PrintExample.java}
+  \inputminted[frame=single]{Scala}{../examples/PrintExample.scala}
   \caption{Notice how Scala's general syntax and structure are similar
     to Java's. At the same time, there are some visible differences, e.g., unit
     is returned in the Scala implementation instead of void in the Java
@@ -98,7 +98,7 @@ a powerful language with a unified programming experience.
   \centering
   \includegraphics[width=0.9\linewidth]{scala_classes}
   \caption{A visual representation of Scala's class hierarchy}
-  \label{fig:example}
+  \label{fig:scala-classes}
 \end{figure*} 
 
 The ideas underlying Scala come from a variety of work. First and foremost, the
@@ -146,7 +146,36 @@ process through which software construction takes place in Scala.
 \label{sec:unified-object-model}
 
 In Scala, every value is an object and every class is a subtype of the
-\texttt{Any} class. Below the \texttt{Any} class, Scala classes can generally be
+\texttt{Any} class. Fig.~\ref{fig:scala-classes} shows an overview of the
+unified object model in Scala's standard library, under which many classes
+simply absorb the existing Java implementation. Immutable objects or
+\emph{values}, denoted with the \texttt{val} keyword on declaration, inherit
+from the class \texttt{AnyVal}, and include classes like \texttt{scala.Boolean}
+and \texttt{scala.Char}. Mutable \emph{variables} on the other hand, inherit
+from \texttt{scala.AnyRef}, which is synonymous with the generic
+\texttt{java.lang.Object}. These include classes like \texttt{scala.List} or
+traits like \texttt{scala.Ordered}. Even functions fit into this object model,
+such as the \texttt{scala.Function1} trait, which single-argument functions
+implement.
+
+One of the fundamental aspects of Scala is its invariance with respect to
+representation. Under this rule, \emph{interpreting an value belonging to some
+  subclass as an element of its superclass does not change that value's
+  representation.} Put another way, this invariance rule demands that for types
+\texttt{S}, \texttt{T} with \texttt{S~<:~T}, and \texttt{x} of type \texttt{S},
+\begin{minted}{Scala}
+x.asInstanceOf[T].asInstanceOf[S] = x
+\end{minted}
+always holds. Because of this rule, Scala's object model includes some unusual
+relations not found in more traditional languages. In particular,
+Fig.~\ref{fig:scala-classes} uses dashed lines to denote a \emph{View} from one
+type to another. As discussed in Sec.~\ref{sec:views}, a view enables
+interpretation between types which are not strictly subtypes of one
+another. For example, both \texttt{Int} and \texttt{Float} maintain a member
+called \texttt{MaxValue}, which other function can rely on without requiring
+a strict subtype of either \texttt{Int} or \texttt{Float}.
+
+Below the \texttt{Any} class, Scala classes can generally be
 divided into two groups: value classes that inherit from the \texttt{AnyVal}
 class and reference classes that inherit from the \texttt{AnyRef} class. Note
 that the value classes that are not \texttt{AnyVal} do not subtype each
@@ -175,6 +204,28 @@ class name. There is no need for a separate class constructor inside the class
 definition. When a class is instantiated with its constructor, the whole body of
 the class is executed.
 
+\subsection{Views}
+\label{sec:views}
+Views are used to implictly convert one type to another. A view is implemented
+with a method that takes in an arguemnt of one type and returns an object of
+another type. The only difference between a view method and a normal method is
+that view methods require the \texttt{implicit} modifier, which goes before the
+method definition. This modifier allows the Scala compiler to know that it is
+the implcit conversion method when converting from one type to another. Scala
+implictly applies a view to an expression, $e$ of type $T$, when one of the
+following cases occur:
+\begin{itemize}
+\item The expected type of $e$ is not of type $T$.
+\item A member selected from $e$ is not a member of $T$.
+\end{itemize}  
+For example, in Figure 7, \texttt{listToSet} is the view that converts \texttt{GenList[T]} to \texttt{Set[T]}. The compiler inserts applications of the view onto \texttt{xs}.
+
+\begin{figure}
+  \inputminted{Scala}{../examples/Set.scala}
+  \caption{An example of views and implcit conversions.}
+  \label{lst:nats-example}
+\end{figure}
+
 \subsection{Singleton Objects}
 \label{sec:singleton-objects}
 
@@ -188,7 +239,7 @@ Singleton Objects are used extensively when Scala uses a Java class. Every
 static member of a Java class is stored in a Singleton Object.
 
 \begin{listing}
-  \inputminted{Scala}{../examples/Nat.scala}
+  \inputminted[frame=single]{Scala}{../examples/Nat.scala}
   \caption{An example outlining Scala classes.}
   \label{lst:nats-example}
 \end{listing}
@@ -241,26 +292,6 @@ Figure 5, the \texttt{eval} function matches \texttt{term} against
 
 Note: unlike Java, writing a simple language interpreter in Scala is almost as easy as writing an interpreter in SML. Examples of pattern matching being used for an interpreter can be seen in the calculator program we wrote.
 
-\subsection{Views}
-Views are used to implictly convert one type to another. A view is implemented
-with a method that takes in an arguemnt of one type and returns an object of
-another type. The only difference between a view method and a normal method is
-that view methods require the \texttt{implicit} modifier, which goes before the
-method definition. This modifier allows the Scala compiler to know that it is
-the implcit conversion method when converting from one type to another. Scala
-implictly applies a view to an expression, $e$ of type $T$, when one of the
-following cases occur:
-\begin{itemize}
-\item The expected type of $e$ is not of type $T$.
-\item A member selected from $e$ is not a member of $T$.
-\end{itemize}  
-For example, in Figure 7, \texttt{listToSet} is the view that converts \texttt{GenList[T]} to \texttt{Set[T]}. The compiler inserts applications of the view onto \texttt{xs}.
-
-\begin{figure}
-  \inputminted{Scala}{../examples/Set.scala}
-  \caption{An example of views and implcit conversions.}
-  \label{lst:nats-example}
-\end{figure}
 % TODO
 % singleton objects - DONE
 
@@ -269,13 +300,13 @@ For example, in Figure 7, \texttt{listToSet} is the view that converts \texttt{G
 % pattern matching in an object oriented setting -DONE
 
 \begin{listing}
-  \inputminted[firstline=3]{Scala}{../examples/Equiv.scala}
+  \inputminted[firstline=3, frame=single]{Scala}{../examples/Equiv.scala}
   \caption{A simple equivalence relation Scala.}
   \label{lst:equiv}
 \end{listing}
 
 \begin{listing}
-  \inputminted[firstline=3]{Scala}{../examples/Ord.scala}
+  \inputminted[firstline=3, frame=single]{Scala}{../examples/Ord.scala}
   \caption{An ordering relation in Scala. It is important to distinguish between
     an ordered type and an ordering on that type, of which there can be
     arbitrarily many. \texttt{Ordering[T]} represents the latter.}
