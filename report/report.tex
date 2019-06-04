@@ -7,7 +7,7 @@
 \usepackage{relsize}
 \usepackage[font=footnotesize]{subfig}
 \usepackage{minted}
-\setminted{fontsize=\scriptsize, frame=single}
+\setminted{fontsize=\scriptsize, frame=single, breaklines=true}
 
 \usepackage{graphicx}
 \graphicspath{ {../images/} }
@@ -92,70 +92,59 @@ a powerful language with a unified programming experience.
 \section{Related Work}
 \label{sec:related-work}
 
-We did not know what $\nu$Obj calculus was and therefore read the paper “A
-Nominal Theory of Objects with Dependent Types” by Martin Odersky, Vincent
-Cremet, Christine Rockl, and Matthias Zenger to better understand the
-concept. Because our main focus is specifically on understanding Scala and not
-on learning the $\nu$Obj calculus (which itself is a topic worthy of its own
-summary paper), we only provide a general description of $\nu$Obj calculus
-below.
-  
-According to Odersky et al., $\nu$Obj calculus, broadly, is “a calculus and
-dependent type system for classes and objects can have types as members.” Note
-that a dependent type is a type that is defined by some value. The calculus’s
-type system is well typed and can implement crucial aspects of Java’s inner
-class system, virtual types, and family polymorphism. Moreover, this type system
-can also model SML-style modules and functors. $\nu$Obj calculus diverges from
-standard type systems for objects in three significant ways:
-
-\begin{itemize}
-\item Instead of only objects being primitive, classes are also primitive. We
-  can view classes as “first class” as they can be the result of a term
-  evaluation and be associated with labels.
-\item Object records are not passed around during evaluation and type
-  checking. Rather, every object has a name reference that is passed around.
-\item Object types can be expressed using (possibly nominal) type components.
-\end{itemize}
-  
-We leave Figures 2 (syntax) and 3 (type assignment) below for the reader's
-interest.
-\begin{figure}[h]
+\begin{figure*}[h]
   \centering
-  \includegraphics[width=\columnwidth]{syntax}
-  \caption{The syntax of the $\nu$Obj calculus}
+  \includegraphics[width=0.9\linewidth]{scala_classes}
+  \caption{A visual representation of Scala's class hierarchy}
   \label{fig:example}
-\end{figure}
+\end{figure*} 
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\columnwidth]{typecheck}
-  \caption{The typing rules of the $\nu$Obj calculus}
-  \label{fig:example}
-\end{figure}
+The ideas underlying Scala come from a variety of work. First and foremost, the
+designers rely on the $\nu$Obj calculus outlined in Odersky \emph{et al.}
+(2003) for a theoretical grounding on which they build Scala's robust type
+system \cite{odersky_nominal_2003}. Although a thorough discussion of the
+$\nu$Obj calculus is beyond the scope of this paper, which focuses on the Scala
+language proper, we describe its main points in brief. Additionally, the ideas
+in Scala have been replicated or expanded on in more recent work, which we
+discuss here.
 
-% 2. Technical summary: Killeen
-\section{Interesting Technical Details}
-\label{sec:interesting-tech}
+The $\nu$Obj calculus is, broadly, a calculus and dependent type system that
+includes classes and objects with types as members
+\cite{odersky_nominal_2003}. \emph{Dependent types} rely on some value for
+definition, and with this formalism, the $\nu$Obj calculus expresses Java's
+inner class system, virtual types, and family polymorphism. Furthermore, it
+models SML-style modules and functors, diverging from standard object-oriented
+type systems in three fundamental ways:
+\begin{enumerate}
+\item Objects \emph{and} classes are considered primitive, as opposed to just
+  objects.
+\item Type checking and evaluation rely on name references rather than object
+  records.                     %TODO: check with Troy.
+\item Object types are expressible using possibly nominal type components.
+\end{enumerate}
+These alterations make possible the rigorous blend of object-oriented and
+functional styles evident in Scala, differing markedly from traditional
+languages like Java and C\#.
 
-\begin{figure}
-  \inputminted{Scala}{../examples/Nat.scala}
-  \caption{An example outlining Scala classes.}
-  \label{lst:nats-example}
-\end{figure}
+% TODO: talk about more related work, including Rust language, more recent
+% extensions of Scala's systems.
 
-\subsection{Singleton Objects}
-\label{sec:singleton-objects}
+The remainder of this paper focuses on the practical considerations of
+programming in the Scala language.
 
-Scala is very unique in that it implements Singleton Objects. Singleton Objects
-are classes that can only have one instance while a Scala program is
-running. Such classes are defined almost exactly the same as normal Scala
-classes. The only difference is that the \texttt{class} modifier is replaced by
-the \texttt{object} modifier. Some examples of singleton objects include: a
-class representation of Zero and the PrintOptions example from above. Note that
-Singleton Objects are used extensively when Scala uses a Java class. Every
-static member of a Java class is stored in a Singleton Object.
+\section{Programming in Scala}
+\label{sec:programming-scala}
+
+Being a fully developed programming language, Scala implements numerous useful
+features that encourage modularity and reusability in software. In this section,
+we highlight just a few of these, as well as provide an overview of the general
+process through which software construction takes place in Scala.
 
 \subsection{Unified Object Model}
+\label{sec:unified-object-model}
+
+
+
 
 In Scala, every value is an object and every class is a subtype of the
 \texttt{Any} class. Below the \texttt{Any} class, Scala classes can generally be
@@ -187,12 +176,23 @@ class name. There is no need for a separate class constructor inside the class
 definition. When a class is instantiated with its constructor, the whole body of
 the class is executed.
 
-\begin{figure*}[h]
-  \centering
-  \includegraphics[width=\linewidth]{scala_classes}
-  \caption{A visual representation of Scala's class hierarchy}
-  \label{fig:example}
-\end{figure*} 
+\subsection{Singleton Objects}
+\label{sec:singleton-objects}
+
+Scala is very unique in that it implements Singleton Objects. Singleton Objects
+are classes that can only have one instance while a Scala program is
+running. Such classes are defined almost exactly the same as normal Scala
+classes. The only difference is that the \texttt{class} modifier is replaced by
+the \texttt{object} modifier. Some examples of singleton objects include: a
+class representation of Zero and the PrintOptions example from above. Note that
+Singleton Objects are used extensively when Scala uses a Java class. Every
+static member of a Java class is stored in a Singleton Object.
+
+\begin{listing}
+  \inputminted{Scala}{../examples/Nat.scala}
+  \caption{An example outlining Scala classes.}
+  \label{lst:nats-example}
+\end{listing}
 
 \subsection{Pattern Matching in an Object-Oriented Setting}
 Unlike Java and other object-oriented programming languages, Scala implements
