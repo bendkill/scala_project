@@ -1,5 +1,5 @@
-object Zero extends Nat {
+object Z extends Nat {
   def isZero = true
-  def succ = Succ(this)
+  def succ = S(this)
   def pred = this
 }

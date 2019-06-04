@@ -8,7 +8,7 @@
 \usepackage[font=footnotesize]{subfig}
 \usepackage{hyperref}
 \usepackage{minted}
-\setminted{fontsize=\scriptsize, breaklines=true}
+\setminted{fontsize=\small, breaklines=true}
 
 \usepackage{graphicx}
 \graphicspath{ {../images/} }
@@ -170,7 +170,7 @@ traits like \texttt{scala.Ordered}. Even functions fit into this object model,
 such as the \texttt{scala.Function1} trait, which single-argument functions
 implement.
 
-One of the fundamental aspects of Scala is its invariance with respect to
+One of the fundamental aspects of Scala is its invariance with respect to value
 representation. Under this rule, \emph{interpreting an value belonging to some
   subclass as an element of its superclass does not change that value's
   representation.} Put another way, this invariance rule demands that for types
@@ -182,78 +182,92 @@ always holds. Because of this rule, Scala's object model includes some unusual
 relations not found in more traditional languages. In particular,
 Fig.~\ref{fig:scala-classes} uses dashed lines to denote a \emph{View} from one
 type to another. As discussed in Sec.~\ref{sec:views}, a view enables
-interpretation between types which are not strictly subtypes of one
-another. For example, both \texttt{Int} and \texttt{Float} maintain a member
-called \texttt{MaxValue}, which other function can rely on without requiring
-a strict subtype of either \texttt{Int} or \texttt{Float}.
+interpretation between types which are not strictly subtypes of one another. For
+example, both \texttt{Int} and \texttt{Float} maintain a member called
+\texttt{MaxValue}, which other function can rely on without requiring a strict
+subtype of either \texttt{Int} or \texttt{Float}. Finally, the
+\texttt{scala.Nothing} trait is a subtype of every other class, allowing for
+flexible objects like the \texttt{scala.List} object \texttt{Nil}, of type
+\texttt{List[Nothing]}.
 
-Below the \texttt{Any} class, Scala classes can generally be
-divided into two groups: value classes that inherit from the \texttt{AnyVal}
-class and reference classes that inherit from the \texttt{AnyRef} class. Note
-that the value classes that are not \texttt{AnyVal} do not subtype each
-other. This means, for example, that the \texttt{Int} class is not a subtype of
-the \texttt{Float} class. Scala prevents such subtyping because the language
-forces an invariant that when a value is interpreted in a subclass and a super
-class, the values's representation does not change. For example, both
-\texttt{Int} and \texttt{Float} maintain a \texttt{MaxValue} member. However,
-the \texttt{MaxValue} of \texttt{Float} is different from the \texttt{MaxValue}
-of \texttt{Int}. Instead, Scala implements \textbf{views} (discussed below)
-which allow from implicit conversions from one type to another. As expected of
-an object-oriented language, class \texttt{Null} is a subtype of every reference
-type. However, since Scala is part functional, the language also has a
-\texttt{Nothing} type, which represents an empty type, is a subtype of every
-single type. For example, \texttt{Nil} is defined as
-\texttt{List[Nothing]}. Note that \texttt{Nothing} allows for the implementation
-of options, another functional concept, in Scala.
+Another fundamental feature of Scala's object model inclusion of operations,
+which are invocations of a method. For example, the usual addition operator
+\texttt{+} can be implemented like any other method, as in
+Lst.~\ref{lst:nats-example}, and invoked in the exact same way: \texttt{x.+(y)}.
+Of course Scala allows for the more conventional calling style \texttt{x + y},
+but it does so merely through syntactic sugaring. Here, \texttt{x} is the
+receiver object, \texttt{+} is a method defined in \texttt{x}, and \texttt{y} is
+the method's argument.
 
-Another major aspect of Scala's object model is that every operation is the
-invocation of a method. For example, \texttt{x + y} is syntactic sugar for
-\text{x.+(y)}; \texttt{x} is the receiver object, \texttt{+} is a method defined
-in \texttt{x}, and \texttt{y} is the method's argument. In fact, Scala desugars
-every identifier between two expressions as a method call of the first
-expression. Unlike constructors in Java, Scala constructors just come from the
-class name. There is no need for a separate class constructor inside the class
-definition. When a class is instantiated with its constructor, the whole body of
-the class is executed.
+Finally, Scala differs from Java with regard to the construction of
+objects. Rather than define a dedicated constructor function within objects, the
+class name itself is simply the constructor. Object instantiations simply runs
+the entire body of the class, instantiated member variables, values, and
+definitions.
+
+\subsection{Traits, Objects, and Classes}
+\label{sec:traits-obj-cls}
+
+Traits in Scala are somewhat akin to abstract classes in Java, defining abstract
+members that should be implemented by more concrete classes. As a very simple
+example, consider the \texttt{Nat} trait which defines necessary operations on
+natural numbers: %
+\begin{samepage}
+  \inputminted{Scala}{../examples/ExampleNat.scala} %
+\end{samepage}
+
+Classes which inherit from \texttt{Nat} must implement the \texttt{isZero},
+\texttt{succ}, and \texttt{pred} methods with the corresponding types in order
+to inherit from \texttt{Nat}. This is advantageous for several reasons. First,
+as we shall see, the \texttt{Nat} class may use these abstract methods to define
+more complex functions, which subclasses need not implement. Second, other
+functions may refer to \texttt{Nat}s as a whole rather than either subclass of
+the original trait.
+
+Objects or singleton objects in Scala often accompany trait definitions. A
+singleton object is at the same time a class definition and the sole
+instantiated member of that class. For instance, the \texttt{Z} object
+represents the natural number ``zero,'' of which there can only be one: %
+\begin{samepage}
+  \inputminted{Scala}{../examples/ExampleZero.scala} %
+\end{samepage}
+This simple implementation behaves as we would expect, relying on the \texttt{S}
+class (below) to implement \texttt{Z.succ}. The choice to ensure \texttt{Z.pred
+  = Z} was made in keeping with conventional evaluation rules. The use of the
+\texttt{extends} keyword represents the inheritance from \texttt{Nat}.
+
+Similarly classes in Scala can ``extend'' a trait, while taking in arguments to
+the constructor. The \texttt{S} class %
+\begin{samepage}
+  \inputminted{Scala}{../examples/ExampleSucc.scala} %
+\end{samepage}
+represents the ``successor'' of another natural \texttt{n}, either \texttt{Z} or
+another \texttt{S}. Here, the use of the \texttt{case} keyword results in a
+constructor very similar to constructors in SML, which can be instantiated
+without the use of \texttt{new} and easily deconstructed in pattern matching
+blocks.
 
 \subsection{Views}
 \label{sec:views}
-Views are used to implictly convert one type to another. A view is implemented
-with a method that takes in an arguemnt of one type and returns an object of
-another type. The only difference between a view method and a normal method is
-that view methods require the \texttt{implicit} modifier, which goes before the
-method definition. This modifier allows the Scala compiler to know that it is
-the implcit conversion method when converting from one type to another. Scala
-implictly applies a view to an expression, $e$ of type $T$, when one of the
-following cases occur:
+
+In place of loose subtyping, Scala requires views to implicitly convert objects
+from one type to another. A view is implemented with a method that takes in an
+arguemnt of one type and returns an object of another type. The only difference
+between a view method and a normal method is that view methods require the
+\texttt{implicit} modifier, which goes before the method definition. This
+modifier allows the Scala compiler to know that it is the implcit conversion
+method when converting from one type to another. Scala implictly applies a view
+to an expression, $e$ of type $T$, when one of the following cases occur:
 \begin{itemize}
 \item The expected type of $e$ is not of type $T$.
 \item A member selected from $e$ is not a member of $T$.
 \end{itemize}  
-For example, in Figure 7, \texttt{listToSet} is the view that converts \texttt{GenList[T]} to \texttt{Set[T]}. The compiler inserts applications of the view onto \texttt{xs}.
-
-\begin{figure}
-  \inputminted{Scala}{../examples/Set.scala}
-  \caption{An example of views and implcit conversions.}
-  \label{lst:nats-example}
-\end{figure}
-
-\subsection{Singleton Objects}
-\label{sec:singleton-objects}
-
-Scala is very unique in that it implements Singleton Objects. Singleton Objects
-are classes that can only have one instance while a Scala program is
-running. Such classes are defined almost exactly the same as normal Scala
-classes. The only difference is that the \texttt{class} modifier is replaced by
-the \texttt{object} modifier. Some examples of singleton objects include: a
-class representation of Zero and the PrintOptions example from above. Note that
-Singleton Objects are used extensively when Scala uses a Java class. Every
-static member of a Java class is stored in a Singleton Object.
+For example, in Lst.~\ref{lst:set-example}, \texttt{listToSet} is the view that converts \texttt{GenList[T]} to \texttt{Set[T]}. The compiler inserts applications of the view onto \texttt{xs}.
 
 \begin{listing}
-  \inputminted[frame=single]{Scala}{../examples/Nat.scala}
-  \caption{An example outlining Scala classes.}
-  \label{lst:nats-example}
+  \inputminted[frame=single, firstline=3, lastline=14]{Scala}{../examples/Set.scala}
+  \caption{An example of views and implcit conversions.}
+  \label{lst:set-example}
 \end{listing}
 
 \subsection{Pattern Matching in an Object-Oriented Setting}
@@ -277,16 +291,20 @@ pattern matching.
 
 Scala's pattern matching expressions can decompose the factory method
 constructors as patterns. The syntax for pattern matching expressions is
-\[                              %TODO: make this actual code, not something weird.
-    \texttt{x \textbf{case} \{ \textbf{case} $p_1 => e_1$ \textbf{case} $p_1 => e_1$ ... \}}
-\]
-This syntax matches the object \texttt{x} against the patterns $p_1, p_2, ...$
-in order. Each $p_1$ is of the form $FactoryMethod(x_1, x_2, …, x_n)$, where
-$FactoryMethod$ refers to the factory method constructors discussed
-previously. When a match $p_i$ is found, then $e_i$ is executed. For example, in
-Figure 5, the \texttt{eval} function matches \texttt{term} against
-\texttt{Num(x)} and \texttt{Plus(left, right)} (the constructors are from Figure
-4).
+\begin{minted}[escapeinside=||, mathescape=true]{Scala}
+x match { 
+  case |$p_1$| => |$e_1$|
+  case |$p_2$| => |$e_2$|
+  |$\dots$|
+}
+\end{minted}
+where $p_1$, $p_2$ are patterns compared against \texttt{x} in order, and $e_1$,
+$e_2$ are the resulting expressions. Each $p_i$ is of the form
+$\mathtt{FactoryMethod}(x_1, x_2, …, x_n)$, where \texttt{FactoryMethod} refers
+to the factory method constructors discussed previously. When a match $p_i$ is
+found, then $e_i$ is executed. For example, in Figure 5, the \texttt{eval}
+function matches \texttt{term} against \texttt{Num(x)} and \texttt{Plus(left,
+  right)} (the constructors are from Figure 4).
 
 \begin{figure}[h]
   \centering
@@ -303,13 +321,6 @@ Figure 5, the \texttt{eval} function matches \texttt{term} against
 \end{figure}
 
 Note: unlike Java, writing a simple language interpreter in Scala is almost as easy as writing an interpreter in SML. Examples of pattern matching being used for an interpreter can be seen in the calculator program we wrote.
-
-% TODO
-% singleton objects - DONE
-
-% unified object model -DONE
-
-% pattern matching in an object oriented setting -DONE
 
 \begin{listing}
   \inputminted[firstline=3, frame=single]{Scala}{../examples/Equiv.scala}
@@ -336,6 +347,12 @@ Note: unlike Java, writing a simple language interpreter in Scala is almost as e
 
 % Views in Scala implement something close to SML's signatures or Haskell's
 % typeclasses. -DONE
+
+\begin{listing}
+  \inputminted[frame=single]{Scala}{../examples/Nat.scala}
+  \caption{An example outlining Scala classes.}
+  \label{lst:nats-example}
+\end{listing}
 
 % 4. report on peano arithmetic calculator.
 \section{Engagement: Peano Arithmetic Calculator}

@@ -34,9 +34,9 @@ object Zero extends Nat {
   def pred = this
 }
 
-case class Succ(v: Nat) extends Nat{
-  override def toString () = s"S($v)"
+case class Succ(n: Nat) extends Nat{
+  override def toString () = s"S($n)"
   def isZero = false
   def succ = Succ(this)
-  def pred = v
+  def pred = n
 }

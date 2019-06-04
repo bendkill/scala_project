@@ -1,5 +1,5 @@
-case class Succ(v: Nat) extends Nat {
+case class S(n: Nat) extends Nat {
   def isZero = false
-  def succ = Succ(this)
-  def pred = v
+  def succ = S(this)
+  def pred = n
 }
