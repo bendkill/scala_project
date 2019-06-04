@@ -6,6 +6,8 @@ project/calculator/target
 **.nav
 **.out
 **.toc
+**.bbl
+**.blg
 examples/nat
 examples/ordlist
 examples/ord

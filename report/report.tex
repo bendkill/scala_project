@@ -5,9 +5,9 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{relsize}
-
+\usepackage[font=footnotesize]{subfig}
 \usepackage{minted}
-\setminted{fontsize=\small} % numbers=right, bgcolor=lightgray}
+\setminted{fontsize=\scriptsize, frame=single}
 
 \usepackage{graphicx}
 \graphicspath{ {../images/} }
@@ -26,47 +26,67 @@ Insert abstract here.
 \section{Introduction}
 \label{sec:intro}
 
-During the mid 2000s, progress in developing component software was slow, which the researchers believed to be because existing languages had little support for component abstraction and composition. Some examples include statically typed languages such as Java and C\#. In response to this lack of progress, Odersky et al. designed and implemented Scala in order to develop better language support for component software. As the researchers put it, components ``are simply software parts which are used in some way by larger parts or whole applications. Components can take many forms; they can be modules, classes, libraries, frameworks, processes, or web services." At the same time, they envisioned their language as eventually being widely adopted. 
+Software components are simply self-contained parts of software used by larger
+parts or entire applications. Modern software typically relies on many common
+components like hashable types or iterable data structures to use as building
+blocks. Component abstraction enables the generalization of implementation for
+these features, greatly reducing duplication of effort. It is one of the most
+powerful tools in the programmer's utility belt, a fact which the designers of
+the Scala programming language aimed to exploit \cite{odersky2004overview}. In
+the early 2000s, existing languages had little support for type-sound component
+abstraction, including widely used languages like Java and C\#. Odersky \emph{et
+  al.} address this shortcoming with a language that combines elements of
+object-oriented and functional programming in a statically typed
+environment. Scala, which gets its name from ``scalable,'' provides a powerful
+interface for abstraction within a development framework intended for mass
+adoption.
 
+In pursuit of usability, Scala borrows many syntactic elements from Java and
+C\#, and it integrates smoothly with components from these languages. In fact,
+the Scala library includes standard Java objects like \texttt{java.lang.String},
+as shown in \ref{lst:print}. Scala code can take advantage of existing
+implementations in Java, and in the end it compiles to Java bytecode, making
+Scala packages available to Java programmers. At the same time, Scala maintains
+a distinct programming paradigm from either Java or C\#. It discards some
+features from these languages, and it develops completely novel ideas from the
+$\nu$Obj calculus \cite{odersky_nominal_2003}. The example in
+Fig.~\ref{lst:print} highlights syntactic similarities between Java and Scala,
+comparing two implementations of the same program. Note how Java prepends type
+declarations before terms, whereas Scala affixes type declarations using the
+\texttt{:} operator. This and other changes effect a terser, more expressive
+syntax overall.
 
-The researchers achieved their goals by focusing on two areas: 
-\begin{itemize}
-\item Developing scalable mechanisms for abstraction, composition, and
-  decomposition. Through this focus, they made their language more scalable
-  than existing languages such as Java. I.e., small and large components of
-  component software can be expressed with the same concepts.
-\item Combining functional programming and object-oriented
-  programming. Odersky et al. decided to combine these two programming
-  paradigms in order to prove better scalable support for software
-  components.
-\end{itemize}
-We now describe on a high-level how Scala achieves its goals of providing
-good support for component software and encouraging mass adoption.
-
-\subsection{High-Level Design}
-\label{sec:high-level-design}
-
-In order to encourage adoption by software developers, Scala's syntax is very similar to Java's and C\#'s. In fact, Scala is able to work and interact with components coded in Java and C\#. However, remember that Java and C\# are suboptimal languages for supporting component software. Thus, in order to improve component support over Java and C\#, Scala discards or modifies some their existing conventions. For example, Figure 1 demonstrates a simple program (CITE THIS) that prints out options provided in the command line.
-\begin{figure}[h]
+\begin{listing}
   \centering
-  \includegraphics[width=\columnwidth]{print_options.JPG}
-  \caption{Figure 1. Notice how Scala's general syntax and structure are similar
+  \inputminted{Java}{../examples/PrintExample.java}
+  \inputminted{Scala}{../examples/PrintExample.scala}
+  \caption{Notice how Scala's general syntax and structure are similar
     to Java's. At the same time, there are some visible differences, e.g., unit
     is returned in the Scala implementation instead of void in the Java
-    implementation. (CITE THIS IMAGE FROM OVERVIEW PAPER.)}
-  \label{fig:example}
-\end{figure}
+    implementation.}
+  \label{lst:print}
+\end{listing}
 
-Large parts of Scala's typing system are unique to the language. Scala's abstract type definitions and path-dependent types utilize $\nu$Obj Calculus (See Section III). Additionally, Scala implements modular mixin composition which combines the advantages of mixins and traits. Traits in Scala are essentially the equivalent of abstract classes in Java while mixins are classes/traits in which other non-child traits can draw methods from. \\\\
-Scala also has a uniform object model. That is, every value is an object and
-every operation is a call to a method. For example, the boolean “true” itself is
-an object (S singleton object, in fact. See Section II for definition of
-singleton object). At the same time, Scala includes functional programming
-aspects such functions being first-class values (i.e. functions can be passed as
-values) and pattern matching. For pattern matching specifically, Scala allows
-objects themselves to be decomposed. This language also implements powerful and
-novel abstraction concepts for types and values. For example, unlike Java
-abstract classes, traits can include method implementations or fields.
+Of course, Scala's foremost strength comes from its typing system. Abstract
+class definitions and path-dependent types utilize the $\nu$Obj Calculus,
+enabling incredible flexibility through the use of traits and mixins
+\cite{odersky_nominal_2003}. Somewhat akin to Java's abstract classes, traits
+allow a programmer to rely on abstract methods for common functionalities. For
+example, the \texttt{Equiv[T]} trait in Fig.~\ref{lst:equiv} represents an
+equivalence relation on the type \texttt{T}, abstracting the definition of
+\texttt{eq} on which a concrete method, \texttt{neq} depends. Mixins enable a
+class to inherit from multiple traits. For instance, one might use
+\texttt{Equiv} in conjunction with an \texttt{Ordering} trait to represent
+separate relations on the same type in one object.
+
+Finally, the uniform object model in Scala provides a cohesive programming
+environment. Every Scala value is an object, and every operation is a call to a
+method. The boolean \texttt{true}, for example, is a singleton object that
+extends (inherits from) the Boolean trait (see
+Sec.~\ref{sec:singleton-objects}). At the same time, Scala fits into a
+functional programming paradigm. Functions themselves are values, and the syntax
+allows for SML-like decomposition and pattern matching. These features result in
+a powerful language with a unified programming experience.
 
 % 3. related work
 \section{Related Work}
@@ -113,66 +133,133 @@ interest.
   \label{fig:example}
 \end{figure}
 
-
 % 2. Technical summary: Killeen
 \section{Interesting Technical Details}
 \label{sec:interesting-tech}
 
 \begin{figure}
-  
-  \inputminted{Scala}{examples/nats.scala}
+  \inputminted{Scala}{../examples/Nat.scala}
   \caption{An example outlining Scala classes.}
   \label{lst:nats-example}
 \end{figure}
 
 \subsection{Singleton Objects}
-Scala is very unique in that it implements Singleton Objects. Singleton Objects are classes that can only have one instance while a Scala program is running. Such classes are defined almost exactly the same as normal Scala classes. The only difference is that the \texttt{class} modifier is replaced by the \texttt{object} modifier. Some examples of singleton objects include: a class representation of Zero and the PrintOptions example from above. Note that Singleton Objects are used extensively when Scala uses a Java class. Every static member of a Java class is stored in a Singleton Object.
+\label{sec:singleton-objects}
+
+Scala is very unique in that it implements Singleton Objects. Singleton Objects
+are classes that can only have one instance while a Scala program is
+running. Such classes are defined almost exactly the same as normal Scala
+classes. The only difference is that the \texttt{class} modifier is replaced by
+the \texttt{object} modifier. Some examples of singleton objects include: a
+class representation of Zero and the PrintOptions example from above. Note that
+Singleton Objects are used extensively when Scala uses a Java class. Every
+static member of a Java class is stored in a Singleton Object.
 
 \subsection{Unified Object Model}
-In Scala, every value is an object and every class is a subtype of the \texttt{Any} class. Below the \texttt{Any} class, Scala classes can generally be divided into two groups: value classes that inherit from the \texttt{AnyVal} class and reference classes that inherit from the \texttt{AnyRef} class. Note that the value classes that are not \texttt{AnyVal} do not subtype each other. This means, for example, that the \texttt{Int} class is not a subtype of the \texttt{Float} class. Scala prevents such subtyping because the language forces an invariant that when a value is interpreted in a subclass and a super class, the values's representation does not change. For example, both \texttt{Int} and \texttt{Float} maintain a \texttt{MaxValue} member. However, the \texttt{MaxValue} of \texttt{Float} is different from the \texttt{MaxValue} of \texttt{Int}. Instead, Scala implements \textbf{views} (discussed below) which allow from implicit conversions from one type to another. As expected of an object-oriented language, class \texttt{Null} is a subtype of every reference type. However, since Scala is part functional, the language also has a \texttt{Nothing} type, which represents an empty type, is a subtype of every single type. For example, \texttt{Nil} is defined as \texttt{List[Nothing]}. Note that \texttt{Nothing} allows for the implementation of options, another functional concept, in Scala. \\\\
-Another major aspect of Scala's object model is that every operation is the invocation of a method. For example, \texttt{x + y} is syntactic sugar for \text{x.+(y)}; \texttt{x} is the receiver object, \texttt{+} is a method defined in \texttt{x}, and \texttt{y} is the method's argument. In fact, Scala desugars every identifier between two expressions as a method call of the first expression. Unlike constructors in Java, Scala constructors just come from the class name. There is no need for a separate class constructor inside the class definition. When a class is instantiated with its constructor, the whole body of the class is executed. 
 
-  \begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{scala_classes}
-    \caption{A visual representation of Scala's class hierarchy}
-    \label{fig:example}
-  \end{figure} 
+In Scala, every value is an object and every class is a subtype of the
+\texttt{Any} class. Below the \texttt{Any} class, Scala classes can generally be
+divided into two groups: value classes that inherit from the \texttt{AnyVal}
+class and reference classes that inherit from the \texttt{AnyRef} class. Note
+that the value classes that are not \texttt{AnyVal} do not subtype each
+other. This means, for example, that the \texttt{Int} class is not a subtype of
+the \texttt{Float} class. Scala prevents such subtyping because the language
+forces an invariant that when a value is interpreted in a subclass and a super
+class, the values's representation does not change. For example, both
+\texttt{Int} and \texttt{Float} maintain a \texttt{MaxValue} member. However,
+the \texttt{MaxValue} of \texttt{Float} is different from the \texttt{MaxValue}
+of \texttt{Int}. Instead, Scala implements \textbf{views} (discussed below)
+which allow from implicit conversions from one type to another. As expected of
+an object-oriented language, class \texttt{Null} is a subtype of every reference
+type. However, since Scala is part functional, the language also has a
+\texttt{Nothing} type, which represents an empty type, is a subtype of every
+single type. For example, \texttt{Nil} is defined as
+\texttt{List[Nothing]}. Note that \texttt{Nothing} allows for the implementation
+of options, another functional concept, in Scala.
+
+Another major aspect of Scala's object model is that every operation is the
+invocation of a method. For example, \texttt{x + y} is syntactic sugar for
+\text{x.+(y)}; \texttt{x} is the receiver object, \texttt{+} is a method defined
+in \texttt{x}, and \texttt{y} is the method's argument. In fact, Scala desugars
+every identifier between two expressions as a method call of the first
+expression. Unlike constructors in Java, Scala constructors just come from the
+class name. There is no need for a separate class constructor inside the class
+definition. When a class is instantiated with its constructor, the whole body of
+the class is executed.
+
+\begin{figure*}[h]
+  \centering
+  \includegraphics[width=\linewidth]{scala_classes}
+  \caption{A visual representation of Scala's class hierarchy}
+  \label{fig:example}
+\end{figure*} 
 
 \subsection{Pattern Matching in an Object-Oriented Setting}
-Unlike Java and other object-oriented programming languages, Scala implements pattern matching. That is, Scala provides the programmer with a natural and functional-like mechanism for ``creating structured data representations similar to algebraic data types and a decomposition mechanism based on pattern matching.'' \\\\
-Since Scala is an object-oriented programming language, it does not have algebraic data types. Instead, Scala creates structured data representations through the \texttt{\textbf{case}} modifier. If $\textbf{case}$ precedes the definition of a class, a factory method with the same arguments as the primary class constructor is automatically defined. For example, in Figure 4, since the \texttt{\textbf{Num}} and \texttt{\textbf{Plus}} classes are defined with the \texttt{\textbf{case}} modifier, we can define an “anonymous” \textbf{Num} object without using the \textbf{new} keyword. As the reader can see, factory methods are very similar in structure to the constructors of algebraic data types. In fact, factory methods serve the same purpose as constructors when pattern matching.\\\\
-Scala's pattern matching expressions can decompose the factory method constructors as patterns. The syntax for pattern matching expressions is 
-\[
+Unlike Java and other object-oriented programming languages, Scala implements
+pattern matching. That is, Scala provides the programmer with a natural and
+functional-like mechanism for ``creating structured data representations similar
+to algebraic data types and a decomposition mechanism based on pattern
+matching.''
+
+
+Since Scala is an object-oriented programming language, it does not have
+algebraic data types. Instead, Scala creates structured data representations
+through the \texttt{\textbf{case}} modifier. If $\textbf{case}$ precedes the
+definition of a class, a factory method with the same arguments as the primary
+class constructor is automatically defined. For example, in Figure 4, since the
+\texttt{\textbf{Num}} and \texttt{\textbf{Plus}} classes are defined with the
+\texttt{\textbf{case}} modifier, we can define an “anonymous” \textbf{Num}
+object without using the \textbf{new} keyword. As the reader can see, factory
+methods are very similar in structure to the constructors of algebraic data
+types. In fact, factory methods serve the same purpose as constructors when
+pattern matching.
+
+Scala's pattern matching expressions can decompose the factory method
+constructors as patterns. The syntax for pattern matching expressions is
+\[                              %TODO: make this actual code, not something weird.
     \texttt{x \textbf{case} \{ \textbf{case} $p_1 => e_1$ \textbf{case} $p_1 => e_1$ ... \}}
 \]
-This syntax matches the object \texttt{x} against the patterns $p_1, p_2, ...$ in order. Each $p_1$ is of the form $FactoryMethod(x_1, x_2, …, x_n)$, where $FactoryMethod$ refers to the factory method constructors discussed previously. When a match $p_i$ is found, then $e_i$ is executed. For example, in Figure 5, the \texttt{eval} function matches \texttt{term} against \texttt{Num(x)} and \texttt{Plus(left, right)} (the constructors are from Figure 4).
+This syntax matches the object \texttt{x} against the patterns $p_1, p_2, ...$
+in order. Each $p_1$ is of the form $FactoryMethod(x_1, x_2, …, x_n)$, where
+$FactoryMethod$ refers to the factory method constructors discussed
+previously. When a match $p_i$ is found, then $e_i$ is executed. For example, in
+Figure 5, the \texttt{eval} function matches \texttt{term} against
+\texttt{Num(x)} and \texttt{Plus(left, right)} (the constructors are from Figure
+4).
 
-  \begin{figure}[h]
-    \centering
-    \includegraphics[width=\columnwidth]{abstract_class}
-    \caption{example}
-    \label{fig:example}
-  \end{figure}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\columnwidth]{abstract_class}
+  \caption{example}
+  \label{fig:example}
+\end{figure}
 
-  \begin{figure}[h]
-    \centering
-    \includegraphics[width=\columnwidth]{pattern_match}
-    \caption{}
-    \label{fig:example}
-  \end{figure}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\columnwidth]{pattern_match}
+  \caption{}
+  \label{fig:example}
+\end{figure}
+
 Note: unlike Java, writing a simple language interpreter in Scala is almost as easy as writing an interpreter in SML. Examples of pattern matching being used for an interpreter can be seen in the calculator program we wrote.
 
 \subsection{Views}
-Views are used to implictly convert one type to another. A view is implemented with a method that takes in an arguemnt of one type and returns an object of another type. The only difference between a view method and a normal method is that view methods require the \texttt{implicit} modifier, which goes before the method definition. This modifier allows the Scala compiler to know that it is the implcit conversion method when converting from one type to another. Scala implictly applies a view to an expression, $e$ of type $T$, when one of the following cases occur:
+Views are used to implictly convert one type to another. A view is implemented
+with a method that takes in an arguemnt of one type and returns an object of
+another type. The only difference between a view method and a normal method is
+that view methods require the \texttt{implicit} modifier, which goes before the
+method definition. This modifier allows the Scala compiler to know that it is
+the implcit conversion method when converting from one type to another. Scala
+implictly applies a view to an expression, $e$ of type $T$, when one of the
+following cases occur:
 \begin{itemize}
-    \item The expected type of $e$ is not of type $T$.
-    \item A member selected from $e$ is not a member of $T$.
+\item The expected type of $e$ is not of type $T$.
+\item A member selected from $e$ is not a member of $T$.
 \end{itemize}  
 For example, in Figure 7, \texttt{listToSet} is the view that converts \texttt{GenList[T]} to \texttt{Set[T]}. The compiler inserts applications of the view onto \texttt{xs}.
+
 \begin{figure}
-  
-  \inputminted{Scala}{examples/Set.scala}
+  \inputminted{Scala}{../examples/Set.scala}
   \caption{An example of views and implcit conversions.}
   \label{lst:nats-example}
 \end{figure}
@@ -182,6 +269,20 @@ For example, in Figure 7, \texttt{listToSet} is the view that converts \texttt{G
 % unified object model -DONE
 
 % pattern matching in an object oriented setting -DONE
+
+\begin{listing}
+  \inputminted[firstline=3]{Scala}{../examples/Equiv.scala}
+  \caption{A simple equivalence relation Scala.}
+  \label{lst:equiv}
+\end{listing}
+
+\begin{listing}
+  \inputminted[firstline=3]{Scala}{../examples/Ord.scala}
+  \caption{An ordering relation in Scala. It is important to distinguish between
+    an ordered type and an ordering on that type, of which there can be
+    arbitrarily many. \texttt{Ordering[T]} represents the latter.}
+  \label{lst:ordering}
+\end{listing}
 
 % Abstraction: -NOT DONE
 % - subtypes and polymorphism
