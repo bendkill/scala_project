@@ -12,9 +12,8 @@
 
 \usepackage{graphicx}
 \graphicspath{ {../images/} }
-\setlength\parindent{0pt}
 
-\title{Scala - A Powerful and Scalable Function-Objective Programming Language}
+\title{A Study in \emph{Scala}bility through Abstraction}
 
 \author{Troy Hu and Benjamin Killeen} % alphabetical by last name
 
@@ -22,7 +21,14 @@
 \maketitle    
 
 \begin{abstract}
-Insert abstract here.
+  The Scala programming language combines object-oriented and functional
+  programming in a single Java-like language intended for mass-adoption. It
+  emphasizes component abstraction in a statically typed environment that
+  enables remarkably modular software design. In this paper, we provide an
+  overview of notable features in the Scala language as well as motivating
+  examples that underlie these aspects.\footnote{Source for this paper and its
+    examples available at \href{https://github.com/bendkill/scala_project}
+    {github.com/bendkill/scala\_project}.}
 \end{abstract}                     
 
 \section{Introduction}
@@ -85,21 +91,14 @@ Finally, the uniform object model in Scala provides a cohesive programming
 environment. Every Scala value is an object, and every operation is a call to a
 method. The boolean \texttt{true}, for example, is a singleton object that
 extends (inherits from) the Boolean trait (see
-Sec.~\ref{sec:singleton-objects}). At the same time, Scala fits into a
-functional programming paradigm. Functions themselves are values, and the syntax
-allows for SML-like decomposition and pattern matching. These features result in
-a powerful language with a unified programming experience.
+Sec.~\ref{sec:traits-obj-cls}). At the same time, Scala fits into a functional
+programming paradigm. Functions themselves are values, and the syntax allows for
+SML-like decomposition and pattern matching. These features result in a powerful
+language with a unified programming experience.
 
 % 3. related work
 \section{Related Work}
 \label{sec:related-work}
-
-\begin{figure*}[h]
-  \centering
-  \includegraphics[width=0.9\linewidth]{scala_classes}
-  \caption{A visual representation of Scala's class hierarchy}
-  \label{fig:scala-classes}
-\end{figure*} 
 
 The ideas underlying Scala come from a variety of work. First and foremost, the
 designers rely on the $\nu$Obj calculus outlined in Odersky \emph{et al.}
@@ -121,33 +120,36 @@ type systems in three fundamental ways:
 \item Objects \emph{and} classes are considered primitive, as opposed to just
   objects.
 \item Type checking and evaluation rely on name references rather than object
-  records.                     %TODO: check with Troy.
+  records.
 \item Object types are expressible using possibly nominal type components.
 \end{enumerate}
 These alterations make possible the rigorous blend of object-oriented and
 functional styles evident in Scala, differing markedly from traditional
 languages like Java and C\#.
 
-% TODO: talk about more related work, including Rust language, more recent
-% extensions of Scala's systems.
-% TODO: CITE
-The Rust programming language is a popular alternative to Scala that is
-designed to target systems-level applications. The 
-language is similar to C++ in that it allows users to interact directly 
-with hardware. Moreover, the syntax of Rust is very similar to that of C++. 
-Rust, however, is unlike C++ in that any program purely written
-in Rust is guaranteed to avoid memory errors and data races.
-Most notably, Rust utilizes many of Scala's core concepts to achieve its goals.
-Like Scala, Rust is both a functional and object-oriented programming language
-(to model C++). Rust also ensures type soundness in order to avoid memory errors
-such as dangling pointers. Unlike Scala, however, Rust emphasizes 
-concurrency and paralellism.
+The Rust programming language is a popular alternative to Scala that is designed
+to target systems-level applications \cite{matsakis_rust_2014}. The language is
+similar to C++ in that it allows users to interact directly with
+hardware. Moreover, the syntax of Rust is very similar to that of C++.  Rust,
+however, is unlike C++ in that any program purely written in Rust is guaranteed
+to avoid memory errors and data races.  Most notably, Rust utilizes many of
+Scala's core concepts to achieve its goals.  Like Scala, Rust is both a
+functional and object-oriented programming language (to model C++). Rust also
+ensures type soundness in order to avoid memory errors such as dangling
+pointers. Unlike Scala, however, Rust emphasizes concurrency and paralellism.
 
 The remainder of this paper focuses on the practical considerations of
 programming in the Scala language.
 
 \section{Programming in Scala}
 \label{sec:programming-scala}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.9\linewidth]{scala_classes}
+  \caption{A visual representation of Scala's class hierarchy}
+  \label{fig:scala-classes}
+\end{figure*} 
 
 Being a fully developed programming language, Scala implements numerous useful
 features that encourage modularity and reusability in software. In this section,
@@ -193,11 +195,11 @@ flexible objects like the \texttt{scala.List} object \texttt{Nil}, of type
 Another fundamental feature of Scala's object model inclusion of operations,
 which are invocations of a method. For example, the usual addition operator
 \texttt{+} can be implemented like any other method, as in
-Lst.~\ref{lst:nats-example}, and invoked in the exact same way: \texttt{x.+(y)}.
-Of course Scala allows for the more conventional calling style \texttt{x + y},
-but it does so merely through syntactic sugaring. Here, \texttt{x} is the
-receiver object, \texttt{+} is a method defined in \texttt{x}, and \texttt{y} is
-the method's argument.
+Lst.~\ref{lst:nat-full}, and invoked in the exact same way: \texttt{x.+(y)}.  Of
+course Scala allows for the more conventional calling style \texttt{x + y}, but
+it does so merely through syntactic sugaring. Here, \texttt{x} is the receiver
+object, \texttt{+} is a method defined in \texttt{x}, and \texttt{y} is the
+method's argument.
 
 Finally, Scala differs from Java with regard to the construction of
 objects. Rather than define a dedicated constructor function within objects, the
@@ -262,7 +264,9 @@ to an expression, $e$ of type $T$, when one of the following cases occur:
 \item The expected type of $e$ is not of type $T$.
 \item A member selected from $e$ is not a member of $T$.
 \end{itemize}  
-For example, in Lst.~\ref{lst:set-example}, \texttt{listToSet} is the view that converts \texttt{GenList[T]} to \texttt{Set[T]}. The compiler inserts applications of the view onto \texttt{xs}.
+For example, in Lst.~\ref{lst:set-example}, \texttt{listToSet} is the view that
+converts \texttt{GenList[T]} to \texttt{Set[T]}. The compiler inserts
+applications of the view onto \texttt{xs}.
 
 \begin{listing}
   \inputminted[frame=single, firstline=3, lastline=14]{Scala}{../examples/Set.scala}
@@ -270,112 +274,204 @@ For example, in Lst.~\ref{lst:set-example}, \texttt{listToSet} is the view that 
   \label{lst:set-example}
 \end{listing}
 
-\subsection{Pattern Matching in an Object-Oriented Setting}
-Unlike Java and other object-oriented programming languages, Scala implements
-pattern matching. That is, Scala provides the programmer with a natural and
-functional-like mechanism for ``creating structured data representations similar
-to algebraic data types and a decomposition mechanism based on pattern
-matching.''
+\subsection{Type Parameters}
+\label{sec:type-parameters}
 
-Since Scala is an object-oriented programming language, it does not have
-algebraic data types. Instead, Scala creates structured data representations
-through the \texttt{\textbf{case}} modifier. If $\textbf{case}$ precedes the
-definition of a class, a factory method with the same arguments as the primary
-class constructor is automatically defined. For example, in Figure 4, since the
-\texttt{\textbf{Num}} and \texttt{\textbf{Plus}} classes are defined with the
-\texttt{\textbf{case}} modifier, we can define an “anonymous” \textbf{Num}
-object without using the \textbf{new} keyword. As the reader can see, factory
-methods are very similar in structure to the constructors of algebraic data
-types. In fact, factory methods serve the same purpose as constructors when
-pattern matching.
-
-Scala's pattern matching expressions can decompose the factory method
-constructors as patterns. The syntax for pattern matching expressions is
-\begin{minted}[escapeinside=||, mathescape=true]{Scala}
-x match { 
-  case |$p_1$| => |$e_1$|
-  case |$p_2$| => |$e_2$|
-  |$\dots$|
-}
+Scala's focus on component abstraction would not be complete without the
+inclusion of type parameters or variables. These allow a function or class to be
+implemented without a specific type in mind while remaining type sound. As a
+simple example, consider the identity function $f(x) = x$ which has type
+$\tau \rightarrow \tau$. This cannot be constrained to any particular type
+\texttt{Int} or \texttt{Boolean} without fundamentally changing its
+behavior. Fortunately, Scala allows for this flexibility with type variables:
+\begin{minted}{Scala}
+def identity [T] (x: T): T = x
 \end{minted}
-where $p_1$, $p_2$ are patterns compared against \texttt{x} in order, and $e_1$,
-$e_2$ are the resulting expressions. Each $p_i$ is of the form
-$\mathtt{FactoryMethod}(x_1, x_2, …, x_n)$, where \texttt{FactoryMethod} refers
-to the factory method constructors discussed previously. When a match $p_i$ is
-found, then $e_i$ is executed. For example, in Figure 5, the \texttt{eval}
-function matches \texttt{term} against \texttt{Num(x)} and \texttt{Plus(left,
-  right)} (the constructors are from Figure 4).
+In this definition, \texttt{[T]} designates a type without constraints which the
+argument \texttt{x} belongs to, as well as the return type of the function, also
+\texttt{T}. Since the body of function simply returns $x$ without invoking any
+methods or assuming any properties, this is valid.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\columnwidth]{abstract_class}
-  \caption{example}
-  \label{fig:example}
-\end{figure}
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\columnwidth]{pattern_match}
-  \caption{}
-  \label{fig:example}
-\end{figure}
-
-Note: unlike Java, writing a simple language interpreter in Scala is almost as easy as writing an interpreter in SML. Examples of pattern matching being used for an interpreter can be seen in the calculator program we wrote.
+Scala traits can also rely on type parameters in much the same
+way. Lst.~\ref{lst:equiv} shows a very simple trait that defines equivalence
+relations on arbitrary types, as long as an implementation of \texttt{eq} exists
+on that type. Not that one must distinguish between a type that can be compared
+for equality and an equality relation on some type. \texttt{Equiv[T]} represents
+the latter. Lst.~\ref{lst:ordering} shows a similar trait that describes
+an ordering on some type \texttt{T}, which we use to implement ordered lists in
+the abstract.
 
 \begin{listing}
-  \inputminted[firstline=3, frame=single]{Scala}{../examples/Equiv.scala}
-  \caption{A simple equivalence relation Scala.}
+  \inputminted[firstline=3, frame=single]{Scala}{../examples/Equiv.scala} 
+  \caption{An abstraction of equivalence relations in Scala.}
   \label{lst:equiv}
 \end{listing}
 
 \begin{listing}
   \inputminted[firstline=3, frame=single]{Scala}{../examples/Ord.scala}
-  \caption{An ordering relation in Scala. It is important to distinguish between
-    an ordered type and an ordering on that type, of which there can be
-    arbitrarily many. \texttt{Ordering[T]} represents the latter.}
+  \caption{An abstraction of ordering relations in Scala.}
   \label{lst:ordering}
 \end{listing}
 
-% Abstraction: -NOT DONE
-% - subtypes and polymorphism
-% - Traits and classes.
-%   - A trait do encapsulate state. They just define methods or variables that you
-%     have to have but don't provide instantiated values for those.
-%   -Classes require implementations or values for everything.
+Scala also allows for constraints on type parameters. These include the subtype,
+supertype, and view relations: \texttt{<:}, \texttt{>:}, and \texttt{<\%}
+respectively. These can be used in concert with one another, as in the following
+method for lexicographic comparison of lists:
+\begin{minted}{Scala}
+trait LexList[+T] {
+  // ...standard list methods...
+  def < [U >: T <: Ordered[U]](that: LexList[U]): Boolean = {
+    !that.isEmpty && 
+    (this.isEmpty ||
+     this.head < that.head || 
+     this.head == that.head ||
+     this.tail < that.tail)
+  }
+}
+\end{minted}
+In \texttt{LexList.<}, \texttt{that} must contain elements that are supertypes
+of the elements of \texttt{this}, since \texttt{U >: T}. Moreover, both elements
+must inherit from the standard \texttt{Ordered[T]} trait, since \texttt{U <:
+  Ordered[U]}. This makes possible the calls to \texttt{<} and \texttt{==}. View
+relations are used similarly, where \texttt{U <\% T} requires that an implicit
+view exists to convert objects of type \texttt{U} to type
+\texttt{T}.
 
-% Multiple inheritance with mixins. (Small paragraph right after abstractions) -NOT DONE
+Crucially, Scala includes strict enforcement of the variance of these types. A
+type constructor \texttt{C} is \emph{covariant} if for \texttt{A <: B},
+\texttt{C[A] <: C[B]}. Similarly, \texttt{C} is \emph{contravariant} if
+\texttt{C[A] >: C[B]} and invariant if neither relation can be guaranteed. Type
+parameters are declared invariant by default and covariant or contravariant
+using the \texttt{+} or \texttt{-} prefixes respectively. In the
+\texttt{LexList} example as well as Lst.~\ref{lst:ordlist-full}, we declare the
+type constructor to be covariant, as lists should be. Scala enforces this
+declaration at compile time by ensuring that \texttt{T} is used in covariant
+positions throughout the body of the trait.
 
-% Views in Scala implement something close to SML's signatures or Haskell's
-% typeclasses. -DONE
+This enforcement is commonly a source of some confusion. The \texttt{OrdList[T]}
+from Lst.~\ref{lst:ordlist-full} has an \texttt{insert} method, for instance,
+that takes an argument \texttt{x: U} where \texttt{U >: T}. Intuitively, one
+would think that \texttt{x: T} should be sufficient, but in fact this is not
+possible in order for \texttt{OrdList} to be covariant. Consider the bad
+definition:
+\begin{minted}{Scala}
+// bad typing for insert! 
+trait OrdList[+T] {
+  def insert(x: T, o: Ordering[T]): OrdList[T];
+}
+\end{minted}
+and suppose we had \texttt{Integer} in addition to \texttt{Nat}, both with a
+common supertype \texttt{Number}. Since \texttt{Nat <: Number} and
+\texttt{Integer <: Number}, covariance requires that
+\begin{minted}{Scala}
+OrdList[Nat] <: OrdList[Number]
+\end{minted}
+and
+\begin{minted}{Scala}
+OrdList[Integer] <: OrdList[Number]
+\end{minted}
+Suppose \texttt{insert} accepted \texttt{x: T} for \texttt{OrdList[T]}. Then an
+\texttt{OrdList[Nat]} could not insert an \texttt{Integer}, a fact which causes
+the following function to fail:
+\begin{minted}{Scala}
+def pushNumber (x: Number, 
+                l: OrdList[Number], 
+                o: Ordering[Number]): 
+    OrdList[Number] = l.insert(x, o)
+\end{minted}
+Under subtyping, \texttt{push} accepts an \texttt{x: Integer} and \texttt{l:
+  OrdList[Nat]}, but with these arguments, the call to \texttt{insert} will
+fail. Under the proper type definition, however, inserting \texttt{x} into
+\texttt{l} will result in an \texttt{OrdList} of their common supertype,
+\texttt{Number}. This is proper covariance.
+
+\subsection{Mixins}
+\label{sec:mixins}
+
+Scala allows for multiple inheritance through the use of mixins. These address
+the diamond inheritance problem, which refers to possible ambiguities that arise
+from multiple inheritance. Every class inherits methods primarily through the
+first superclass listed, allowing for a single path of superclass
+dependencies. This disambiguates collisions of class members, as in
+Lst.~\ref{lst:mixin}, which implements the usual ordering on $\mathbb{N}$ by
+defining \texttt{leq} as well as an equivalence relation that compares the
+evenness of two naturals, through \texttt{equal}. The collision here occurs
+between \texttt{Ordering[T]}'s \texttt{neq}, which depends on \texttt{leq}, and
+\texttt{Equiv[T]}'s \texttt{neq}, which depends on \texttt{equal}. Because
+\texttt{NatOrderingWithEquiv} extends first from \texttt{Ordering[Nat]}, it will
+use the definition that depends on \texttt{leq}.
 
 \begin{listing}
-  \inputminted[frame=single]{Scala}{../examples/Nat.scala}
-  \caption{An example outlining Scala classes.}
-  \label{lst:nats-example}
+\inputminted[frame=single, firstline=5]{Scala}{../examples/MixinExample.scala}
+\caption{A single object representing two relations on Naturals, an ordering and
+an equivalence relation.}
+\label{lst:mixin}
 \end{listing}
 
+\begin{listing*}[p]
+  \inputminted[frame=single, fontsize=\scriptsize, linenos=true]
+  {Scala}{../examples/Nat.scala}
+  \caption{Complete implementation of the \texttt{nat} package.}
+  \label{lst:nat-full}
+\end{listing*}
+
+\begin{listing*}[p]
+  \inputminted[frame=single, fontsize=\scriptsize, linenos=true]
+  {Scala}{../examples/OrdList.scala}
+  \caption{Complete implementation of the \texttt{ordlist} package, which
+    requires an \texttt{Ordering[T]}. Note how \texttt{OrdList[T]} is covariant,
+    so \texttt{insert} requires argument \texttt{x} to be of a supertype of
+    \texttt{T}.}
+  \label{lst:ordlist-full}
+\end{listing*}
+
 % 4. report on peano arithmetic calculator.
-\section{Engagement: Peano Arithmetic Calculator}
-\label{sec:engag-peano-arithm}
+\section{Application: Peano Arithmetic Calculator}
+\label{sec:appl-peano-arithm}
+
+Although this paper includes significant engagement with the Scala language
+merely to describe its features, we consider illustrative examples a poor
+indicator of a language's friendliness toward component abstraction. In order to
+truly evaluate Scala's scalability, we implement a full-scale interpreter for a
+small calculator language called \texttt{peano}. The full description of this
+language is beyond the scope of this paper, but it includes sufficient
+complexity to take full advantage of Scala's flexibility. \texttt{peano} gets
+its name from the Peano Arithmetic, with which all expressions are evaluated
+\cite{grassmann_lehrbuch_1861}. The \texttt{peano} interpreter is implemented in
+a mostly functional style with separate objects \texttt{Scanner},
+\texttt{Parser}, \texttt{Desugarer}, \texttt{TypeChecker}, and
+\texttt{Evaluator} that interpret \texttt{peano} expressions. It includes the
+standard operations on naturals, integers, and rationals: addition,
+multiplication, \emph{etc.}, while also providing higher level functions like
+GCD and LCM. These challenges gave us the opportunity to work with Scala in the
+same setting that large-scale developers do, using its built-in project manager
+\texttt{sbt}.
+
+In general, we found Scala to be simple to work with. Scala development is vast
+improvement over existing workflows in Java and C\#, even without taking
+advantage of component abstraction, due to the language's more expressive
+syntax. It's error messages are informative, and the built-in package manager
+\texttt{sbt} takes care of the many nuances of software construction and
+deployment. The scope of \texttt{peano}, initially envisioned as a much simpler
+calculator language that used built-in numeric types for evaluation, attests to
+our enjoyment of programming in Scala.
+
+The source for \texttt{peano} as well as basic usage instructions can be found at
+\href{https://www.github.com/bendkill/peano}{github.com/bendkill/peano}.
 
 % 5. should encapsulate discussion of current status
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Current Status of Work}
 After 15 years, Scala has been regularly updated and is currently at stable
 release version 2.12.8. Over this period, the core principles of Scala have
 remained the same. Scala has achieved widespread adoption in the industry with
 companies such as Twitter and Apple utilizing the language. Moreover, Scala has
 both a large academic and non-academic user base. The language is often cited or
 used in computer science research. In addition, Scala's user community is
-thriving. there exist chatrooms, subreddits, and research conferences devoted
-entirely to Scala. Numerous libraries, tutorials, and guides are run and
-maintained by the community. The main community page can be found at:
-https://www.scala-lang.org/community/. A detailed, updated, and easy to read
-documentation can be found at: https://docs.scala-lang.org/. Finally, there are
-dedicated installers/installation guides for all operating systems at:
-\href{https://www.scala-lang.org/download/}{scala-lang.org/download}.
+thriving. There exist chatrooms, subreddits, and research conferences devoted
+entirely to Scala. The community maintains up-to-date documentation and
+installation instructions at \href{https://www.scala-lang.org/}{scala-lang.org}.
 
 
 \bibliographystyle{IEEEtran}

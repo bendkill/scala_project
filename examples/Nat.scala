@@ -16,6 +16,8 @@ trait Nat {
   def >  (that: Nat): Boolean = NatOrdering.gt(this, that)
   def == (that: Nat): Boolean = NatOrdering.eq(this, that)
   def != (that: Nat): Boolean = NatOrdering.neq(this, that)
+  def isEven: Boolean = if (this.isZero) true else !this.pred.isEven
+  def isOdd: Boolean = !this.isEven
 }
 
 object NatOrdering extends Ordering[Nat] {

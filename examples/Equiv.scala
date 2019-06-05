@@ -1,6 +1,6 @@
 package equiv
 
 trait Equiv[T] {
-  def eq  (x: T, y: T): Boolean; // abstract
-  def neq (x: T, y: T): Boolean = !neq(x, y)
+  def equal  (x: T, y: T): Boolean;
+  def neq (x: T, y: T): Boolean = !equal(x, y)
 }
